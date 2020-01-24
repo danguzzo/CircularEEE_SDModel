@@ -1,0 +1,2720 @@
+{UTF-8}
+R EEE in use:INTERPOLATE:
+	~	unit
+	~	Value of EEE in use obtained from the retrospective model.
+		Equivalent to all EEE in a country.
+	|
+
+********************************************************
+	.indicators
+********************************************************~
+	|
+
+leakage of materials=
+	ZIDZ (WEEE not recycled, Total materials in the system)
+	~	1/year
+	~	Indicator to check the ratio of materials leaving the system as WEEE
+	|
+
+leakage of products=
+	ZIDZ(disposal of EEE as WEEE , Total products in the system)
+	~	1/year
+	~	Indicator to check the ratio of products leaving the system as WEEE
+	|
+
+max value EEE commissioning=SAMPLE IF TRUE(
+	EEE commissioning > max value EEE commissioning, EEE commissioning , EEE commissioning\
+		)
+	~	unit/year
+	~	Provides the historical maximum value of EEE commissioning.
+	|
+
+max value remanufacturing=SAMPLE IF TRUE(
+	remanufacturing > max value remanufacturing, remanufacturing , remanufacturing)
+	~	unit/year
+	~	Provides the historical maximum value of remanufacturing.
+	|
+
+max value second use commissioning=SAMPLE IF TRUE(
+	second use commissioning > max value second use commissioning, second use commissioning\
+		 , second use commissioning)
+	~	unit/year
+	~	Provides the historical maximum value of second use commissioning.
+	|
+
+max value WEEE recycling=SAMPLE IF TRUE(
+	WEEE recycling > max value WEEE recycling, WEEE recycling , WEEE recycling)
+	~	kg/year
+	~	Provides the historical maximum value of WEEE recycling.
+	|
+
+time max value commissioning=SAMPLE IF TRUE(
+	EEE commissioning >= max value EEE commissioning, Time , Time)
+	~	year
+	~	Provides the year of the historical maximum value of EEE commissioning.
+	|
+
+time max value recycling=SAMPLE IF TRUE(
+	WEEE recycling >= max value WEEE recycling, Time, Time)
+	~	year [1980,2050]
+	~	Provides the year of the historical maximum value of WEEE recycling.
+	|
+
+time max value remanufacturing=SAMPLE IF TRUE(
+	remanufacturing >= max value remanufacturing, Time , Time)
+	~	year
+	~	Provides the year of the historical maximum value of remanufacturing.
+	|
+
+time max value second use commissioning=SAMPLE IF TRUE(
+	second use commissioning >= max value second use commissioning, Time , Time)
+	~	year
+	~	Provides the year of the historical maximum value of second use \
+		commissioning.
+	|
+
+Total materials in the system=
+	Total products in the system * EEE average unit weight + WEEE before treatment
+	~	kg
+	~	Counts the total stock of materials in the system
+	|
+
+Total products in the system=
+	Available used EEE + First use EEE + Second use EEE
+	~	unit
+	~	Counts the total stock of products in the system
+	|
+
+total value of Available WEEE=
+	WEEE before treatment * WEEE average market value
+	~	USD
+	~	Total value of e-waste in the system at that moment
+	|
+
+WEEE average market value=
+	10
+	~	USD/kg
+	~	Average market value of WEEE
+	|
+
+********************************************************
+	.Theil
+********************************************************~
+	|
+
+"1 - us"=
+	1 - us
+	~	Dimensionless
+	~	One minus variance inequality proportion. Used to verify against UC
+	|
+
+count = INTEG(pick/dt,0)
+	~	Dimensionless
+	~	Counter for # of points
+	|
+
+dif cov = 2*Sx*Sy*(1-r)
+	~	Units*Units
+	~	Difference of covariances
+	|
+
+dif mea = (M X-M Y)*(M X-M Y)
+	~	Units*Units
+	~	Difference of Means (bias)
+	|
+
+dif var = (Sx-Sy)*(Sx-Sy)
+	~	Units*Units
+	~	Difference of variances
+	|
+
+dt=
+	TIME STEP
+	~	Time Units
+	~		|
+
+historical time series=
+	historic EEE put on market
+	~	Units
+	~	Dummy variable to id series
+	|
+
+M X = ZIDZ(Sum Xi,count)
+	~	Units
+	~	Mean of x (sum x)/n
+	|
+
+M Y = ZIDZ(Sum Yi,count)
+	~	Units
+	~	Mean of y (sum y)/n
+	|
+
+mape = ZIDZ(Sum APE,count)
+	~	Dimensionless
+	~	Mean Absolute Percent Error
+	|
+
+mse = dif mea + dif var + dif cov
+	~	Units*Units
+	~	Mean Square Error. The addition of the three components
+	|
+
+MX2 = ZIDZ(SumX2,count)
+	~	Units*Units
+	~	Mean of x^2 (sum x^2)/n
+	|
+
+Mxy = ZIDZ(SumXY,count)
+	~	Units*Units
+	~	Mean of x*y (sum x*y)/n
+	|
+
+MY2 = ZIDZ(SumY2,count)
+	~	Units*Units
+	~	Mean of y^2 (sum y^2)/n
+	|
+
+pick=
+	IF THEN ELSE(Y = :NA: :OR: X = :NA:, 0, 1)
+	~	Dimensionless
+	~	Flag to id historical value available.
+		   Takes a value of one for every data point available
+	|
+
+r=
+	MIN(1,ZIDZ(Mxy-(M X*M Y),Sx*Sy))
+	~	Dimensionless [-1,1]
+	~	Correlation coefficient. Calculated through the 'hand computation'. 
+		   Sterman (1984) pg. 63
+		MAX prevents numerical issues due to numerical precision; perhaps there is \
+		a better way to do this. -TF
+	|
+
+r2 = r*r
+	~	Dimensionless
+	~	Correlation coefficient squared
+	|
+
+residuals=
+	IF THEN ELSE(pick,Xi-Yi,:NA:)
+	~	Units
+	~	Errors
+	|
+
+rmse = SQRT(mse)
+	~	Units
+	~	Root Mean Square Error
+	|
+
+RMSPE = SQRT(ZIDZ(Sum SPE,count))
+	~	Dimensionless
+	~	Root Mean Square Percent Error
+	|
+
+simulated time series=
+	EEE commissioning
+	~	Units
+	~	Dummy variable to id series
+	|
+
+SSE=
+	Sum XmY2
+	~	Units*Units
+	~	Sum of Square Errors (x-y)^2
+	|
+
+Sum APE = INTEG(ABS(ZIDZ(Xi-Yi,Yi))/dt,0)
+	~	Dimensionless
+	~	Sum of Absolute Percent Errors
+	|
+
+Sum SPE = INTEG((ZIDZ(Xi-Yi,Yi)*ZIDZ(Xi-Yi,Yi))/dt,0)
+	~	Dimensionless
+	~	Sum of Square Percent Errors ((x-y)/y)^2
+	|
+
+Sum Xi = INTEG(Xi/dt,0)
+	~	Units
+	~	Sum of x's (simulated)
+	|
+
+Sum XmY2 = INTEG((Xi-Yi)*(Xi-Yi)/dt,0)
+	~	Units*Units
+	~	Sum of Square Errors (x-y)^2
+	|
+
+Sum Yi = INTEG(Yi/dt,0)
+	~	Units
+	~	Sum of y's (historical)
+	|
+
+SumX2 = INTEG(Xi*Xi/dt,0)
+	~	Units*Units
+	~	Sum of x^2 (simulated)
+	|
+
+SumXY = INTEG(Xi*Yi/dt,0)
+	~	Units*Units
+	~	Sum of x*y
+	|
+
+SumY2 = INTEG(Yi*Yi/dt,0)
+	~	Units*Units
+	~	Sum of y^2 (historical)
+	|
+
+Sx=
+	SQRT(MAX(0,MX2-(M X*M X)))
+	~	Units
+	~	Standard Deviation of x. Calculated using the 'hand computation' formula 
+		   to calculate the standard deviation without prior knowledge of the mean. 
+		   Sterman (1984), pg. 64
+	|
+
+Sy=
+	SQRT(MAX(0,MY2-(M Y*M Y)))
+	~	Units
+	~	Standard Deviation of y. Calculated using the 'hand computation' formula 
+		   to calculate the standard deviation without prior knowledge of the mean. 
+		   Sterman (1984), pg. 64
+	|
+
+uc = ZIDZ(dif cov,mse)
+	~	Dimensionless
+	~	Covariance inequality proportion
+	|
+
+um = ZIDZ(dif mea,mse)
+	~	Dimensionless
+	~	Bias inequality proportion
+	|
+
+us = ZIDZ(dif var,mse)
+	~	Dimensionless
+	~	Variance inequality proportion
+	|
+
+X=
+	simulated time series
+	~	Units
+	~	Simulated time series values
+	|
+
+Xi = pick*X
+	~	Units
+	~	Simulated point entering calculations
+	|
+
+Y=
+	 historical time series
+	~	Units
+	~	Historical time series values
+	|
+
+Yi = pick*Y
+	~	Units
+	~	Historical point entering calculations
+	|
+
+********************************************************
+	.CE mechanisms
+********************************************************~
+	|
+
+infra development initial year=
+	2015
+	~	year
+	~	Mechanism used to verify the implementation of increasing/decreasing \
+		infrastructure (initial year of implementation)
+	|
+
+lifetime ratio=
+	1
+	~	dmnl
+	~	Mechanism used to verify the design of EEE holding increased lifetimes
+	|
+
+R desired level=
+	0
+	~	dmnl
+	~	Mechanism used to verify the implementation of increasing/decreasing \
+		repairing infrastructure (final level of implementation)
+	|
+
+R desired year=
+	2030
+	~	year
+	~	Mechanism used to verify the implementation of increasing/decreasing \
+		repairing infrastructure (final year of implementation)
+	|
+
+R initial level=
+	0
+	~	dmnl
+	~	Mechanism used to verify the implementation of different levels of initial \
+		repairing infrastructure
+	|
+
+RC desired level=
+	4
+	~	dmnl
+	~	Mechanism used to verify the implementation of increasing/decreasing \
+		recycling infrastructure (final level of implementation)
+	|
+
+RC desired year=
+	2030
+	~	year
+	~	Mechanism used to verify the implementation of increasing/decreasing \
+		recycling infrastructure (final year of implementation)
+	|
+
+RC initial level=
+	0
+	~	dmnl
+	~	Mechanism used to verify the implementation of different levels of initial \
+		recycling infrastructure
+	|
+
+recycling infrastructure level=
+	RC initial level + switch infra development * RAMP((RC desired level-RC initial level\
+		)/(RC desired year-infra development initial year
+	), infra development initial year, RC desired year
+	)
+	~	dmnl
+	~	Defines the recycling infrastructure implementation level
+	|
+
+remanufacturing infrastructure level=
+	RM initial level + switch infra development * RAMP((RM desired level-RM initial level\
+		)/(RM desired year-infra development initial year
+	), infra development initial year, RM desired year
+	)
+	~	dmnl [0,4]
+	~	Defines the remanufacturing infrastructure implementation level
+	|
+
+repairing infrastructure level=
+	R initial level + switch infra development * RAMP((R desired level-R initial level)/\
+		(R desired year-infra development initial year
+), infra development initial year, R desired year
+	)
+	~	dmnl [0,4]
+	~	Defines the repairing infrastructure implementation level
+	|
+
+RM desired level=
+	0
+	~	dmnl
+	~	Mechanism used to verify the implementation of increasing/decreasing \
+		remanufacturing infrastructure (final level of implementation)
+	|
+
+RM desired year=
+	2030
+	~	year
+	~	Mechanism used to verify the implementation of increasing/decreasing \
+		remanufacturing infrastructure (final year of implementation)
+	|
+
+RM initial level=
+	0
+	~	dmnl
+	~	Mechanism used to verify the implementation of different levels of initial \
+		remanufacturing infrastructure
+	|
+
+second use infrastructure level=
+	SU initial level + switch infra development * RAMP((SU desired level-SU initial level\
+		)/(SU desired year-infra development initial year
+), infra development initial year, SU desired year
+	)
+	~	dmnl
+	~	Defines the second use infrastructure implementation level
+	|
+
+SU desired level=
+	0
+	~	dmnl
+	~	Mechanism used to verify the implementation of increasing/decreasing \
+		second use infrastructure (final level of implementation)
+	|
+
+SU desired year=
+	2030
+	~	year
+	~	Mechanism used to verify the implementation of increasing/decreasing \
+		second use infrastructure (final year of implementation)
+	|
+
+SU initial level=
+	0
+	~	dmnl
+	~	Mechanism used to verify the implementation of different levels of initial \
+		second use infrastructure
+	|
+
+switch infra development=
+	0
+	~	dmnl [0,1]
+	~	Switch to turn on/off the bechanism to verify implementation of \
+		increasing/decreasing infrastructures
+	|
+
+********************************************************
+	.material supply
+********************************************************~
+	|
+
+expected EEE demand=
+	SMOOTH (EEE demand * EEE average unit weight, distribution time)
+	~	kg/year
+	~	Represents the EEE demand rate. Actors obtain information from market prospects. 
+		An information lag consistent to the average time for distribution of \
+		products is considered.
+	|
+
+desired stock lenght of processed material=
+	1
+	~	year
+	~	Coverage (in time equivalent) of the stock of processed material \
+		considering the actual EEE demand
+	|
+
+stock adjustment time=
+	1
+	~	year
+	~	Time taken to adjust stock of processed material, i.e. every x year the \
+		stock is readjusted.
+	|
+
+expected material kept in the system=
+	SMOOTH(remanufacturing * EEE average unit weight, reman time) + SMOOTH (WEEE recycling\
+		, recycling time)
+	~	kg/year
+	~	Represents the rate at which material is restored in the system. Actors obtain \
+		information from the remanufacturing and recycling processes. 
+		An information lag consistent to the average time of such processes is \
+		considered.
+	|
+
+adjustment for stock of Processed material=
+	(desired stock of processed material - Processed material)/stock adjustment time
+	~	kg/year
+	~	Represents the adjustment of the stock comparing the desired stock to the actual \
+		stock of processed materials available.
+		An information lag consistent to the time to extract is considered.
+	|
+
+desired stock of processed material=
+	SMOOTH(expected EEE demand * desired stock lenght of processed material, distribution time\
+		)
+	~	kg
+	~	A desired stock of processed material consistent to EEE demand and considering a \
+		defined desired lenght of material is kept.
+		An information lag consistent to the distribution time is considered.
+	|
+
+desired extraction rate=
+	MAX (0, (expected EEE demand - expected material kept in the system))
+	~	kg/year
+	~	Represents the rate at which the industry intends to extract material, sufficient to \
+		attend EEE demand considering the material which is kept in the system \
+		through restauration processes.
+		Extraction rate cannot be negative
+	|
+
+extraction rate considering minimum stock=
+	adjustment for stock of Processed material + desired extraction rate
+	~	kg/year
+	~	Represents the rate at which the industry intends to extract material \
+		considering a minimum stock of processed materials.
+	|
+
+********************************************************
+	.depreciation
+********************************************************~
+	|
+
+average EEE value=
+	EEE unit price - average EEE age * EEE depreciation ratio
+	~	USD/unit
+	~	Average monetary value of first use EEE
+	|
+
+Total historical first use EEE value= INTEG (
+	average EEE value * First use EEE,
+		0)
+	~	USD
+	~	Total historical value of first use EEE.
+	|
+
+decomissioned EEE outflows=
+	(WEEE not recycled + WEEE recycling) / EEE average unit weight + remanufacturing + second use commissioning
+	~	unit/year
+	~	In unit per year equivalent
+	|
+
+decommissioned EEE average outflow price=
+	(WEEE average market value * ratio WEEE recycling from decomissioned EEE - WEEE costs for non recycling\
+		 * ratio WEEE not being recycled from decomissioned EEE
+	) * EEE average unit weight + remanufacturing contribution per unit * ratio remanufacturing from decommissioned EEE\
+		 + second use price
+	 * ratio second use comissioning from decommissioned EEE
+	~	USD/unit
+	~	Average outflow price of available used EEE considering the possibilities \
+		for second use, remanufacturing, recycling, and not-recycling.
+	|
+
+EEE depreciation ratio=
+	ZIDZ ((EEE unit price - decommissioned EEE average outflow price)  , average EEE age\
+		)
+	~	USD/year
+	~	Annual decrease in value of first use assets considering the possibilities \
+		for restauration and costs of not recycling when customers decommission it.
+	|
+
+ratio of EEE price for second use=
+	0.3
+	~	dmnl
+	~	Fraction of the full price that customers are willing to pay for a second \
+		use product.
+	|
+
+ratio of reman contribution per unit=
+	0.3
+	~	dmnl
+	~	Ratio of the contribution assumed for a remanufactured product in \
+		comparison to buying new.
+	|
+
+ratio remanufacturing from decommissioned EEE=
+	ZIDZ (remanufacturing, decomissioned EEE outflows)
+	~	dmnl
+	~	Ratio of available used EEE that flow into remanufacturing.
+	|
+
+ratio second use comissioning from decommissioned EEE=
+	ZIDZ (second use commissioning, decomissioned EEE outflows)
+	~	dmnl
+	~	Ratio of available used EEE that are commissioned for second use.
+	|
+
+ratio WEEE not being recycled from decomissioned EEE=
+	ZIDZ (WEEE not recycled/EEE average unit weight, decomissioned EEE outflows)
+	~	dmnl
+	~	Ratio of available used EEE that is not formally collected and, thus, not \
+		recycled.
+	|
+
+ratio WEEE recycling from decomissioned EEE=
+	ZIDZ (WEEE recycling/EEE average unit weight, decomissioned EEE outflows)
+	~	dmnl
+	~	Ratio of available used EEE that flow into recycling.
+	|
+
+remanufacturing contribution per unit=
+	EEE unit price * ratio of reman contribution per unit
+	~	USD/unit
+	~	Remanufacturing contribution per unit of EEE
+	|
+
+second use price=
+	EEE unit price * ratio of EEE price for second use
+	~	USD/unit
+	~	Second use price per unit
+	|
+
+total first use EEE value=
+	First use EEE * average EEE value
+	~	USD
+	~	Total value of first use EEE at a given moment in time.
+	|
+
+WEEE costs for non recycling=
+	5
+	~	USD/kg
+	~	Average sytemic costs assumed for note recycling.
+	|
+
+********************************************************
+	.EEE and WEEE flows
+********************************************************~
+	|
+
+remanufacturing=
+	MIN( DELAY1(Available used EEE * fraction introduced to reman market * remanufacturability EEE\
+		, reman time), EEE demand
+	 )
+	~	unit/year
+	~	Remanufactuing rate of available used EEE.
+		Relies on the EEE introduced to reman market that is in fact remanufactured.
+		Responds to EEE demand first than assembling.
+		
+		† Units inconsistency due to probabilty unit (dmnl) obtained from the \
+		Weibull function used. The average probability (dmnl) for that given \
+		population (unit) at that moment in time defines the quantity of unities \
+		of the total stock flowing through this rate (unit/year).
+	|
+
+second use commissioning=
+	DELAY1(Available used EEE * fraction introduced to second use market , redistribution time\
+		)
+	~	unit/year
+	~	Commissioning rate of used EEE into a new life
+		
+		† Units inconsistency due to probabilty unit (dmnl) obtained from the \
+		Weibull function used. The average probability (dmnl) for that given \
+		population (unit) at that moment in time defines the quantity of unities \
+		of the total stock flowing through this rate (unit/year).
+	|
+
+disposal of EEE as WEEE=
+	DELAY1(Available used EEE * fraction introduced to WEEE market , collection time)
+	~	unit/year
+	~	Rate of disposal of EEE as WEEE.
+		
+		† Units inconsistency due to the mechanism created to limit the disposal \
+		of EEE as WEEE considering second use and remanufacturing. This fraction \
+		defines the probability for the total stock to flow through this rate.
+	|
+
+first use decommissioning before broken=
+	DELAY1(First use EEE * fraction of decomissioned before broken , (expected lifetime for decommissioning before broken\
+		 +
+	 time to make available))
+	~	unit/year
+	~	Decommissioning rate of EEE because of psychological obsolescence.
+		Responds to the decommisioning probability because owner has bought a new \
+		product before the former was faulty or broken.
+	|
+
+WEEE recycling=
+	(DELAY1(WEEE before treatment * fraction of WEEE formally collected , recycling time\
+		) + recycling of EEE from remanufacturing process
+	) * recyclability EEE
+	~	kg/year
+	~	Recycling rate of WEEE
+		Relies on the WEEE introduced to the recycling market that is in fact recycled.
+		
+		Units inconsistency due to the mechanisms created to determine the \
+		recycling potential of the system. This fraction (dmnl) defines the \
+		probability for the total stock (unit) to flow through this rate through \
+		time (unit/year).
+	|
+
+second use decommissioning=
+	DELAY1(Second use EEE * decommissioning probability in the end of life for second use\
+		 , time to make available)
+	~	unit/year
+	~	Decommissioning rate of used EEE because of functional obsolescence.
+		Responds to the decommisioning probability because product has achieved the end of \
+		its functional life.
+		
+		† Units inconsistency due to probabilty unit (dmnl) obtained from the \
+		Weibull function used. The average probability (dmnl) for that given \
+		population (unit) at that moment in time defines the quantity of unities \
+		of the total stock flowing through this rate (unit/year).
+	|
+
+first use decommissioning because faulty=
+	DELAY1 (First use EEE * decommissioning probability in the end of life for first use\
+		 * (1 - fraction of decomissioned before broken
+	) , time to make available)
+	~	unit/year
+	~	Decommissioning rate of EEE because of functional obsolescence.
+		Responds to the decommisioning probability because product has achieved the end of \
+		its functional life.
+		
+		† Units inconsistency due to probabilty unit (dmnl) obtained from the \
+		Weibull function used. The average probability (dmnl) for that given \
+		population (unit) at that moment in time defines the quantity of unities \
+		of the total stock flowing through this rate (unit/year).
+	|
+
+WEEE not recycled=
+	WEEE before treatment * fraction of WEEE not formally collected / collection time + \
+		non recycled WEEE because of recyclability
+	~	kg/year
+	~	Rate of WEEE which is not recycled
+	|
+
+initial stock of second use EEE=
+	0
+	~	unit
+	~	Initial stock of second use EEE
+	|
+
+recyclability EEE=
+	0.37
+	~	dmnl
+	~	Defines the ratio of products that, entering the recycling process, will be recycled.
+		Considers the physical treatment and chemical recovery processes available.
+	|
+
+Processed material= INTEG (
+	(extraction + WEEE recycling) - EEE commissioning * EEE average unit weight,
+		initial stock of processed material)
+	~	kg
+	~	Stock of processed material available
+	|
+
+initial stock of raw material=
+	1e+08
+	~	kg
+	~	Initial stock of raw material
+	|
+
+Raw material= INTEG (
+	-extraction,
+		initial stock of raw material)
+	~	kg
+	~	Stock of raw material available
+	|
+
+distribution time=
+	TIME STEP
+	~	year
+	~	Time to distribute commissioned EEE.
+		Is used in the model as a default process time value.
+	|
+
+recycling time=
+	2 * distribution time
+	~	year
+	~	Time to recycle collected WEEE.
+	|
+
+reman time=
+	2 * distribution time
+	~	year
+	~	Time to remanufacture available used EEE.
+	|
+
+time to extract=
+	2 * distribution time
+	~	year
+	~	Time to extract raw material into processed material.
+	|
+
+extraction=
+	DELAY1 (MAX (extraction rate considering minimum stock, 0) , time to extract)
+	~	kg/year
+	~	Extraction rate of raw material into processed material.
+		Responds to the extraction rate considering minimum stock. A material \
+		delay of the time to extract is considered.
+	|
+
+First use EEE= INTEG (
+	EEE commissioning+remanufacturing-first use decommissioning because faulty-first use decommissioning before broken\
+		,
+		initial stock of first use EEE)
+	~	unit
+	~	Stock of EEE in first use
+	|
+
+EEE commissioning=
+	DELAY1(EEE demand, distribution time)
+	~	unit/year
+	~	Commissioning rate of processed material into EEE.
+		Responds to EEE demand.
+	|
+
+Available used EEE= INTEG (
+	first use decommissioning because faulty+first use decommissioning before broken+second use decommissioning\
+		-disposal of EEE as WEEE-remanufacturing-second use commissioning,
+		initial stock of available used EEE)
+	~	unit
+	~	Stock of used EEE available after first and second use
+	|
+
+initial stock of non recycled WEEE=
+	0
+	~	kg
+	~	Initial stock of non recycled WEEE
+	|
+
+initial stock of processed material=
+	0
+	~	kg
+	~	Initial stock of processed material.
+	|
+
+Second use EEE= INTEG (
+	second use commissioning-second use decommissioning,
+		initial stock of second use EEE)
+	~	unit
+	~	Stock of EEE in second use
+	|
+
+Non recycled WEEE= INTEG (
+	WEEE not recycled,
+		initial stock of non recycled WEEE)
+	~	kg
+	~	Stock of non-recycled WEEE. Sink of the system.
+	|
+
+initial stock of available used EEE=
+	0
+	~	unit
+	~	Initial stock of available used EEE
+	|
+
+initial stock of first use EEE=
+	0
+	~	unit
+	~	Initial stock of first use EEE
+	|
+
+initial stock of WEEE before treatment=
+	0
+	~	kg
+	~	Initial stock of WEEE before treatment
+	|
+
+WEEE before treatment= INTEG (
+	disposal of EEE as WEEE * EEE average unit weight - WEEE not recycled - WEEE recycling\
+		,
+		initial stock of WEEE before treatment)
+	~	kg
+	~	Stock of WEEE available before treatment
+	|
+
+recycling of EEE from remanufacturing process=
+	remanufacturing * (1 - remanufacturability EEE) / remanufacturability EEE * EEE average unit weight
+	~	kg/year
+	~	Defines the recycling rate from the remanufacturing process
+	|
+
+non recycled WEEE because of recyclability=
+	WEEE recycling * (1-recyclability EEE)
+	~	kg/year
+	~	Rate of WEEE which is formally collected but is not recycled because of \
+		EEE recyclability
+	|
+
+fraction of decomissioned before broken=
+	0
+	~	dmnl
+	~	Fraction of products that will be decommissioned for reasons other than \
+		functional obsolescence
+	|
+
+time to make available=
+	1 * distribution time
+	~	year
+	~	Time to make obsolete products available for second use, remanufacturing \
+		or collection.
+	|
+
+remanufacturability EEE=
+	0.8
+	~	dmnl
+	~	Defines the ratio of products that, entering the remanufacturing process, will be \
+		remanufactured.
+		Considers that some products (or parts thereof) will be recycled instead \
+		because these are broken beyond restauration, or will be broken during the \
+		process.
+	|
+
+collection time=
+	2 * distribution time
+	~	year
+	~	Time to collect decommissioned EEE
+	|
+
+redistribution time=
+	2 * distribution time
+	~	year
+	~	Time to redistribute available used EEE.
+	|
+
+********************************************************
+	.EEE obsolescence
+********************************************************~
+	|
+
+increase in age of first use EEE=
+	First use EEE * rate of ageing + remanufacturing * virtual age after reman
+	~	dmnl
+	~	Increase rate in the total age of the stock of first use EEE
+	|
+
+increase in age of second use EEE=
+	Second use EEE * rate of ageing + second use commissioning * virtual age after repair
+	~	dmnl
+	~	Increase rate in the total age of the stock of second use EEE
+	|
+
+lifetime expected for reman products=
+	mean lifetime * lifetime fraction for reman products
+	~	year/unit
+	~	Represents how many years a new customer expects a remanufactured EEE will \
+		function based on the mean lifetime of EEEs
+	|
+
+lifetime fraction for decommissioning before broken=
+	0.5
+	~	dmnl
+	~	Determines the fraction of the lifetime of an EEE that a user will keep \
+		the product before buying a new one for other reasons than functional \
+		obsolescence
+	|
+
+decommissioning probability in the end of life for first use=
+	weibull shape / weibull scale * (average EEE age/weibull scale) ^ (weibull shape-1)
+	~	dmnl
+	~	The Weibull failure rate equation defines the decommissioning probability for first \
+		use in the EEE end of life
+		
+		† Units inconsistency due to the use of the Weibull equation. It \
+		provides a probabilty (dmnl) based on the age of an asset (year/unit), and \
+		stablished parameters (dmnl). In this case, we are using the average age \
+		of a population, leading to the average probability for that given \
+		population.
+	|
+
+decommissioning probability in the end of life for second use=
+	EXP (( - ( average second use EEE age / weibull scale) ^ weibull shape) + ((virtual age after repair\
+		 / weibull scale) ^
+	 weibull shape))
+	~	dmnl
+	~	The Weibull failure rate equation defines the decommissioning probability for second \
+		use in the EEE end of life
+		
+		† Units inconsistency due to the use of the Weibull equation. It \
+		provides a probabilty (dmnl) based on the age of an asset (year/unit), and \
+		stablished parameters (dmnl). In this case, we are using the average age \
+		of a population, leading to the average probability for that given \
+		population.
+	|
+
+mean lifetime=
+	EXP (GAMMA LN(1/weibull shape + 1)) * weibull scale
+	~	year/unit
+	~	Represents the average time that the EEE units in the population are expected to \
+		operate before failure.
+		
+		† Units inconsistency due to the use of the Weibull equation. It \
+		provides the mean lifetime of a given product (year/unit) based on the \
+		scale (dmnl) and shape (dmnl) parameters.
+	|
+
+decrease in age of first use EEE=
+	first use decommissioning because faulty * average EEE age + first use decommissioning before broken\
+		 * expected lifetime for decommissioning before broken
+	~	dmnl
+	~	Decrease rate in the total age of the stock of first use EEE
+	|
+
+reman effectiveness= WITH LOOKUP (
+	remanufacturing infrastructure level,
+		([(0,0)-(4,1)],(0,0),(1,0.3),(2,0.5),(3,0.7),(4,0.9) ))
+	~	dmnl
+	~	The reman effectiveness correspondent to the 0-4 infrastructure level.
+		The reman effectiveness determines the restauration ratio of the repairing \
+		processes. For instance, if the average reman effectiveness is 0.8 (80%), \
+		the product will rejuvenate to 20% of its actual age after repairing.
+	|
+
+expected lifetime for decommissioning before broken=
+	lifetime fraction for decommissioning before broken * mean lifetime
+	~	year/unit
+	~	average EEE age when decommissioned before broken
+		Represents how many years a new customer expects a second use EEE will \
+		function based on the mean lifetime of EEEs
+	|
+
+expected lifetime for second use=
+	mean lifetime * lifetime fraction for second use
+	~	year/unit
+	~	Represents how many years a new customer expects a second use EEE will \
+		function based on the mean lifetime of EEEs
+	|
+
+fraction fit for reman=
+	EXP (( - ( (virtual age after reman + lifetime expected for reman products) / weibull scale\
+		) ^ weibull shape) + ((virtual age after reman
+	 / weibull scale) ^ weibull shape))
+	~	dmnl
+	~	Makes use of a conditional reliability function to determine fraction of EEE \
+		products fit for remanufacturing. 
+		The conditional reliability function defines the probability of operating for a \
+		minimal lifetime expected by customers considering the conditions of the \
+		product when remanufactured.
+		Only those that meet the condition will be, in fact, remanufactured.
+		
+		† Units inconsistency due to the use of the Weibull equation. It \
+		provides a probabilty (dmnl) based on the age of an asset (year/unit), and \
+		stablished parameters (dmnl). In this case, we are using the average age \
+		of a population, leading to the average probability for that given \
+		population.
+	|
+
+fraction fit for second use=
+	EXP (( - ( (virtual age after repair + expected lifetime for second use) / weibull scale\
+		) ^ weibull shape) + ((virtual age after repair
+	 / weibull scale) ^ weibull shape))
+	~	dmnl
+	~	Makes use of a conditional reliability function to determine the fraction of EEE \
+		products fit for second use. 
+		The conditional reliability function defines the probability of operating for a \
+		minimal lifetime expected by customers considering the conditions of the \
+		product when repaired.
+		Only those prodcts that meet the condition will be, in fact, repaired.
+		
+		† Units inconsistency due to the use of the Weibull equation. It \
+		provides a probabilty (dmnl) based on the age of an asset (year/unit), and \
+		stablished parameters (dmnl). In this case, we are using the average age \
+		of a population, leading to the average probability for that given \
+		population.
+	|
+
+fraction introduced to reman market=
+	MIN (fraction fit for reman * reman market coverage, 1 - fraction introduced to second use market\
+		)
+	~	dmnl
+	~	The fraction of decommissioned EEE that will be introduced to the reman \
+		market depends on the reman market coverage and the fit of EEEs for \
+		remanufacturing. It also depends on the existence of second-use market for \
+		those products.
+	|
+
+fraction introduced to second use market=
+	second hand market coverage * fraction fit for second use
+	~	dmnl
+	~	The fraction of decommissioned EEE that will be introduced to the second \
+		use market depends on the second use market coverage and fit of EEEs for \
+		second use
+	|
+
+fraction introduced to WEEE market=
+	1 - (fraction introduced to second use market + fraction introduced to reman market)
+	~	dmnl
+	~	The fraction of decommissioned EEE that will be introduced to the WEEE \
+		market depends on the existence of second-use and remanufacturing markets \
+		for those products.
+	|
+
+fraction of WEEE formally collected= WITH LOOKUP (
+	recycling infrastructure level,
+		([(0,0)-(4,1)],(0,0),(1,0.2),(2,0.4),(3,0.5),(4,0.8) ))
+	~	dmnl
+	~	Defines the recycling market coverage based on the 0-4 infrastructure level.
+		The coverage defines the ratio of WEEE that will be formally collected for \
+		recycling.
+	|
+
+fraction of WEEE not formally collected=
+	1 - fraction of WEEE formally collected
+	~	dmnl
+	~	Represents the ratio of WEEE that will not be formally collected for \
+		recycling because of insufficient information.
+	|
+
+increase in age of available used EEE=
+	Available used EEE * rate of ageing + first use decommissioning because faulty * average EEE age\
+		 + first use decommissioning before broken
+	 * expected lifetime for decommissioning before broken + second use decommissioning \
+		* average second use EEE age
+	~	dmnl
+	~	Increase rate in the total age of the stock of available used EEE
+	|
+
+reman market coverage= WITH LOOKUP (
+	remanufacturing infrastructure level,
+		([(0,0)-(4,1)],(0,0),(1,0.2),(2,0.4),(3,0.6),(4,0.8) ))
+	~	dmnl
+	~	The remanufacturing market coverage correspondent the 0-4 infrastructure level.
+		The coverage defines the ratio of EEE that will reach the reman market.
+	|
+
+repair effectiveness= WITH LOOKUP (
+	repairing infrastructure level,
+		([(0,0)-(4,1)],(0,0),(1,0.1),(2,0.2),(3,0.3),(4,0.4) ))
+	~	dmnl
+	~	The repair effectiveness correspondent to the 0-4 infrastructure level.
+		The repair effectiveness determines the restauration ratio of the \
+		repairing processes. For instance, if the average repair effectiveness is \
+		0.2 (20%), the product will rejuvenate to 80% of its actual age after \
+		repairing.
+	|
+
+second hand market coverage= WITH LOOKUP (
+	second use infrastructure level,
+		([(0,0)-(4,1)],(0,0),(1,0.2),(2,0.4),(3,0.6),(4,0.8) ))
+	~	dmnl
+	~	The second hand market coverage correspondent the 0-4 infrastructure level.
+		The coverage defines the ratio of EEE that will reach the second hand \
+		market.
+	|
+
+virtual age after repair=
+	average decommissioned EEE age * (1 - repair effectiveness)
+	~	year/unit
+	~	Corresponds to the new average age of EEE products after repairing.
+	|
+
+lifetime fraction for reman products=
+	0.8
+	~	dmnl
+	~	Determines the fraction of the lifetime of an EEE that a consumer expects \
+		for a remanufactured product
+	|
+
+lifetime fraction for second use=
+	0.5
+	~	dmnl
+	~	Determines the fraction of the lifetime of an EEE that a consumer expects \
+		for a product in second use
+	|
+
+virtual age after reman=
+	average decommissioned EEE age * (1 - reman effectiveness)
+	~	year/unit
+	~	Corresponds to the new average age of EEE products after remanufacturing.
+	|
+
+weibull shape=
+	2.01
+	~	dmnl [0,?]
+	~	The weibull shape parameter identifies the failure rate pattern through \
+		time. This parameter defines decreasing (β<1), constant (β=1), or \
+		increasing (β>1) failure rates over the product's lifetime
+	|
+
+weibull scale=
+	11.75 * lifetime ratio
+	~	dmnl [0,?]
+	~	The weibull scale defines the lifetime at which 63.2% of units will fail.
+	|
+
+average age of useful products=
+	ZIDZ ((average EEE age * First use EEE + average second use EEE age * Second use EEE\
+		) , (First use EEE + Second use EEE
+	))
+	~	year/unit
+	~	Average age of the combination of the stocks of first use and second use \
+		EEE
+	|
+
+average decommissioned EEE age=
+	ZIDZ ( Total age of available used EEE, Available used EEE)
+	~	year/unit
+	~	Average age of the stock of decommissioned EEE
+	|
+
+average EEE age=
+	ZIDZ (Total age of first use EEE , First use EEE)
+	~	year/unit
+	~	Average age of the stock of first use EEE
+	|
+
+average second use EEE age=
+	ZIDZ (Total time of second use EEE, Second use EEE)
+	~	year/unit
+	~	Average age of the stock of second use EEE
+	|
+
+decrease in age of available used EEE=
+	second use commissioning * average decommissioned EEE age + disposal of EEE as WEEE \
+		* average decommissioned EEE age + remanufacturing * average decommissioned EEE age
+	~	dmnl
+	~	Decrease rate in the total age of the stock of available used EEE
+	|
+
+decrease in age of second use EEE=
+	second use decommissioning * average second use EEE age
+	~	dmnl
+	~	Decrease rate in the total age of the stock of second use EEE
+	|
+
+rate of ageing=
+	1
+	~	year/(year*unit)
+	~	Rate of age gain by EEE unit per year passed
+	|
+
+Total age of available used EEE= INTEG (
+	increase in age of available used EEE - decrease in age of available used EEE,
+		0)
+	~	year
+	~	Total age of the stock of available used EEE in years
+	|
+
+Total age of first use EEE= INTEG (
+	increase in age of first use EEE - decrease in age of first use EEE,
+		0)
+	~	year
+	~	Total age of the stock of first use EEE in years
+	|
+
+Total time of second use EEE= INTEG (
+	increase in age of second use EEE - decrease in age of second use EEE,
+		0)
+	~	year
+	~	Total age of the stock of second use EEE in years
+	|
+
+********************************************************
+	.model checking
+********************************************************~
+	|
+
+EEE per household=
+	Total EEE in use / total households
+	~	unit/house
+	~	Average number of stock in use (first and second use) per household
+	|
+
+EEE per inhabitant=
+	Total EEE in use / population
+	~	unit/inhabitant
+	~	Average number of stock in use (first and second use) per inhabitant. 
+		Can be used to verify against: \
+		https://statistics-netherlands.shinyapps.io/sales_and_waste/
+	|
+
+error households adoption=
+	EEE adopters + Potential EEE adopters - total households
+	~	house
+	~	This variable represents the error on the adoption submodel comparing to the total \
+		population.
+		As the adoption submodel comprises two stocks ('EEE adopters' and 'Potential EEE \
+		adopters'), these should sum equal to 'total households' during the whole \
+		simulation. 
+		Error is due to the use of the TREND function in the 'household increase \
+		trend' to define 'households variation'.
+	|
+
+current stock of EEE=
+	First use EEE + Available used EEE + Second use EEE
+	~	unit
+	~	Sum of all the stocks of EEE.
+	|
+
+current stock of material=
+	Raw material + Processed material + Non recycled WEEE + WEEE before treatment
+	~	kg
+	~	Sum of all the stocks of material.
+	|
+
+EEE inflows=
+	EEE commissioning + first use decommissioning because faulty + first use decommissioning before broken\
+		 + second use commissioning + second use decommissioning + remanufacturing
+	~	unit/year
+	~	Rate of all EEE inflows.
+	|
+
+EEE outflows=
+	first use decommissioning because faulty + first use decommissioning before broken +\
+		 second use commissioning + second use decommissioning + remanufacturing + disposal of EEE as WEEE
+	~	unit/year
+	~	Rate of all EEE outflows.
+	|
+
+initial stock of EEE=
+	initial stock of first use EEE + initial stock of available used EEE + initial stock of second use EEE
+	~	unit
+	~	Sum of initial stocks of EEE.
+	|
+
+initial stock of material=
+	initial stock of raw material + initial stock of processed material + initial stock of WEEE before treatment\
+		 + initial stock of non recycled WEEE
+	~	kg
+	~	Sum of initial stocks of material.
+	|
+
+mass balance EEE=
+	Sum of all EEE inflows + initial stock of EEE - Sum of all EEE outflows - current stock of EEE
+	~	unit
+	~	Mass-balance check of EEE
+	|
+
+mass balance material=
+	Sum of all material inflows + initial stock of material - Sum of all material outflows\
+		 - current stock of material
+	~	kg
+	~	Mass balance check of material
+	|
+
+material inflows=
+	extraction + WEEE recycling + disposal of EEE as WEEE * EEE average unit weight + WEEE not recycled
+	~	kg/year
+	~	Rate of all material inflows.
+	|
+
+material outflows=
+	extraction + EEE commissioning * EEE average unit weight + WEEE not recycled + WEEE recycling
+	~	kg/year
+	~	Rate of all material outflows.
+	|
+
+Sum of all EEE inflows= INTEG (
+	EEE inflows,
+		0)
+	~	unit
+	~	Sum of all EEE inflows.
+	|
+
+Sum of all EEE outflows= INTEG (
+	EEE outflows,
+		0)
+	~	unit
+	~	Sum of all EEE outflows.
+	|
+
+Sum of all material inflows= INTEG (
+	material inflows,
+		0)
+	~	kg
+	~	Sum of all material inflows.
+	|
+
+Sum of all material outflows= INTEG (
+	material outflows,
+		0)
+	~	kg
+	~	Sum of all material outflows.
+	|
+
+********************************************************
+	.retrospective
+********************************************************~
+	|
+
+population:INTERPOLATE:
+	~	inhabitant
+	~	Total number of inhabitants at that moment
+		[obtained externally, drives the model]
+	|
+
+EEE unit price:INTERPOLATE:
+	~	USD/unit
+	~	Historial prices of flat panel television
+	|
+
+effect of normalised PPP on average number of EEE per adopter:INTERPOLATE:
+	~	unit/house
+	~	Defines the effect of the purchasing power parity per capta on the average \
+		number of EEE one adopter unit (household or inhabitant) need and can \
+		afford at the point in time.
+	|
+
+historic disposal of EEE:INTERPOLATE:
+	~	unit/year
+	~	Historical value of annual EEE disposal in a specific country.
+		[obtained externally, drives the model]
+	|
+
+historic EEE put on market:INTERPOLATE:
+	~	unit/year
+	~	Historical value of EEE commisioned in specific country.
+		[obtained externally]
+	|
+
+household increase trend=
+	TREND(total households, TIME STEP, 0.01)
+	~	1/year
+	~	Trend estimate of households through time.
+		
+		† Units inconsistency due to the use of TIME STEP to verify the growth \
+		rate, emulating the derivative of households in at a given point in time. \
+		This justifies the use of '1/year' instead of 'house/year'.
+	|
+
+total households variation=
+	household increase trend * total households
+	~	house/year
+	~	Variation of households considering the trend from historical values.
+	|
+
+normalised PPP=
+	purchasing power parity per capta / PPP 1980
+	~	dmnl
+	~	Normalised value of purchasing power parity considering the value at the \
+		initial time as reference.
+	|
+
+potential adoption fraction:INTERPOLATE:
+	~	dmnl
+	~	Potential ratio of the population (household or inhabitant) that are \
+		impeled to adopt the technology considering the price and their earnings.
+	|
+
+PPP 1980=
+	GET DATA AT TIME(purchasing power parity per capta, 1980)
+	~	USD
+	~	Reference value for purchasing power parity per capta. Value at initial \
+		time is used as reference.
+	|
+
+purchasing power parity per capta:INTERPOLATE:
+	~	USD
+	~	Reference used to measure the real purchasing power in different regions.
+		[obtained externally, drives the model]
+	|
+
+R EEE per adopter:INTERPOLATE:
+	~	unit/house
+	~	Historical value of number of EEE unities per adopter
+		[defined by the retrospective model]
+	|
+
+total households:INTERPOLATE:
+	~	house
+	~	Total number of households at that moment
+		[obtained externally, drives the model]
+	|
+
+EEE average unit weight:INTERPOLATE:
+	~	kg/unit
+	~	Average unit weight of EEE.
+	|
+
+********************************************************
+	.technology adoption
+********************************************************~
+	|
+
+actual adoption fraction=
+	EEE adopters / total households
+	~	dmnl
+	~	Actual ratio of the population (household or inhabitant) that has adopted \
+		the technology.
+	|
+
+additional purchases=
+	DELAY1(MAX (gap from EEE in use to desired, 0), time to realise additional need)
+	~	unit/year
+	~	The 'gap from EEE in use to desired' defines additional purchases from \
+		adopters. Purchases cannot be negative.
+	|
+
+adoption purchases=
+	adoption rate * number of purchases when adopting
+	~	unit/year
+	~	Adoption purchases happen at the moment that a fraction of the population \
+		(households or inhabitants) adopt the technology. Relies on the number of \
+		adopters and the average number of purchages when one adopts.
+	|
+
+adoption rate=
+	MAX (potential adoption fraction - actual adoption fraction, 0) * total households
+	~	house/year
+	~	Ratio of adoption to the technology. Relies on the difference among the potential \
+		adoption fraction and the actual adoption fraction multiplied by the total \
+		population (households or individuals)
+		
+		† Units inconsistency due to the structure set to drive the technology \
+		adoption model. The comparison among the potential adoption fraction \
+		(dmnl) obtained from the retrospective model and the actual adoption \
+		(dmnl) fraction multiplied by the total households (house) defines the \
+		adoption rate at that moment in time (house/year).
+	|
+
+average EEE desired per adopter=
+	MIN (effect of normalised PPP on average number of EEE per adopter * normalised PPP,\
+		 max EEE desired)
+	~	unit/house
+	~	Represents the average EEE unities that one population unity (household or \
+		inhabitant) need and can afford at the point in time.
+		The value is limited by the maximum EEE unities one need and can \
+		historically afford.
+	|
+
+desired EEE=
+	EEE adopters * average EEE desired per adopter
+	~	unit
+	~	Represents the total EEE unities needed by the population (household or \
+		inhabitant) at the point in time.
+	|
+
+EEE adopters= INTEG (
+	adoption rate,
+		initial adopters)
+	~	house
+	~	Stock of adopters. Relies on the ones (households or inhabitants) that \
+		adopted the technology.
+	|
+
+EEE demand=
+	adoption purchases + additional purchases + recurrent purchases to replace
+	~	unit/year
+	~	Total EEE demand stems from the initial purchases when the population \
+		adopt the given technology and the additional and replacing purchases from \
+		adopters.
+	|
+
+gap from EEE in use to desired=
+	desired EEE - Total EEE in use
+	~	unit
+	~	Represents the difference of EEE needed and in use by the population \
+		(households or inhabitants) at that moment in time.
+	|
+
+initial adopters=
+	initial adopters fraction * total households
+	~	house
+	~	Population number (household or inhabitant) that already adopted the \
+		technology at the initial time
+	|
+
+initial adopters fraction=
+	0
+	~	dmnl
+	~	Population ratio (household or inhabitant) that already adopted the \
+		technology at the initial time.
+	|
+
+initial potential adopters=
+	(1 - initial adopters fraction) * total households
+	~	house
+	~	Population number (household or inhabitant) that has not yet adopted the \
+		technology at the initial time.
+	|
+
+max EEE desired=
+	GET DATA AT TIME (R EEE per adopter, 2015)
+	~	unit/house
+	~	Represents the maximum EEE unities that one population unity (household or \
+		inhabitant) need and can historically afford.
+	|
+
+new potential adopters=
+	total households variation
+	~	house/year
+	~	Ratio of new potential adopters to the technology. Relies on the variation \
+		of the population (variation of households or inhabitants). Additional \
+		households or inhabitants start as potential adopters.
+	|
+
+number of purchases when adopting=
+	1
+	~	unit/house
+	~	Represents the average EEE unities that one population unity (household or \
+		inhabitant) buy when adopting the technology.
+	|
+
+Potential EEE adopters= INTEG (
+	new potential adopters-adoption rate,
+		initial potential adopters)
+	~	house
+	~	Stock of potential adopters. Relies on new potential adopters minus the \
+		ones (households or inhabitants) that adopted the technology.
+	|
+
+recurrent purchases to replace=
+	disposal of EEE as WEEE
+	~	unit/year
+	~	Recurrent purchases to replace stem from the EEE that leave the system as \
+		WEEE. The ones that (re-)enter in second use or that are remanufactured \
+		are, thus, not considered.
+	|
+
+time to realise additional need=
+	TIME STEP
+	~	year
+	~	Average time taken by customers to realise they need additional EEE \
+		products
+	|
+
+Total EEE in use=
+	First use EEE + Second use EEE
+	~	unit
+	~	Total EEE in use considering stock in first and second use
+	|
+
+********************************************************
+	.timeto
+********************************************************~
+	|
+
+********************************************************
+	.ewastev9 retrospective
+********************************************************~
+	|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 2050
+	~	year
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 1980
+	~	year
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	year [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 0.125
+	~	year [0,?]
+	~	Time step adopted for the simulation
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*1. Technology adoption
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,5,2
+10,1,purchasing power parity per capta,1425,778,57,19,8,3,0,4,0,0,0,0,-1--1--1,192-255-255,|12||0-0-0,0,0,0,0,0,0
+10,3,total households,441,413,51,11,8,3,0,4,0,0,0,0,-1--1--1,192-255-255,|12||0-0-0,0,0,0,0,0,0
+10,8,Total EEE in use,1454,225,52,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,9,household increase trend,303,485,45,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,10,3,9,1,0,0,0,0,128,0,-1--1--1,,1|(365,444)|
+10,11,Potential EEE adopters,869,500,52,20,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,12,EEE adopters,1203,497,40,20,3,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,13,15,12,4,0,0,22,0,0,0,-1--1--1,,1|(1099,498)|
+1,14,15,11,100,0,0,22,0,0,0,-1--1--1,,1|(972,498)|
+11,15,4820,1030,498,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,16,adoption rate,1030,517,42,11,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,17,desired EEE,1214,364,40,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,18,average EEE desired per adopter,1377,407,67,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,19,18,17,1,0,0,0,0,128,0,-1--1--1,,1|(1317,376)|
+10,20,number of purchases when adopting,662,327,66,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,21,adoption purchases,852,362,32,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,22,12,26,1,0,0,0,0,128,0,-1--1--1,,1|(1186,569)|
+1,23,12,17,1,0,0,0,0,128,0,-1--1--1,,1|(1236,448)|
+10,24,initial adopters,1274,554,46,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,25,24,12,1,0,0,0,0,128,1,-1--1--1,,1|(1277,514)|
+10,26,actual adoption fraction,1130,602,49,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,27,potential adoption fraction,992,682,57,19,8,3,0,4,0,0,0,0,-1--1--1,255-128-192,|12||0-0-0,0,0,0,0,0,0
+1,28,26,16,1,0,0,0,0,128,0,-1--1--1,,1|(1047,572)|
+1,29,27,16,1,0,0,0,0,128,0,-1--1--1,,1|(973,597)|
+1,30,15,21,1,0,0,0,0,128,0,-1--1--1,,1|(996,404)|
+1,31,20,21,1,0,0,0,0,128,0,-1--1--1,,1|(768,316)|
+10,32,EEE demand,977,250,42,11,8,3,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+1,33,21,32,1,0,0,0,0,128,0,-1--1--1,,1|(939,322)|
+10,34,initial adopters fraction,1390,563,46,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,35,34,24,1,0,0,0,0,128,0,-1--1--1,,1|(1317,580)|
+10,36,initial potential adopters,793,619,45,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,37,36,11,1,0,0,0,0,128,1,-1--1--1,,1|(860,559)|
+10,38,effect of normalised PPP on average number of EEE per adopter,1644,481,89,28,8,3,0,4,0,0,0,0,-1--1--1,255-128-192,|12||0-0-0,0,0,0,0,0,0
+1,39,38,18,1,0,0,0,0,128,0,-1--1--1,,1|(1517,432)|
+12,40,48,649,493,26,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,41,43,11,4,0,0,22,0,0,0,-1--1--1,,1|(780,493)|
+1,42,43,40,100,0,0,22,0,0,0,-1--1--1,,1|(703,493)|
+11,43,48,738,493,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,44,new potential adopters,738,520,43,19,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,45,8,50,1,0,0,0,0,128,0,-1--1--1,,1|(1347,241)|
+1,46,17,50,1,0,0,0,0,128,0,-1--1--1,,1|(1228,321)|
+10,47,total households variation,523,620,52,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,48,9,47,1,0,0,0,0,128,0,-1--1--1,,1|(367,547)|
+1,49,3,47,1,0,0,0,0,128,0,-1--1--1,,1|(494,523)|
+10,50,gap from EEE in use to desired,1301,293,65,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,51,50,63,1,0,0,0,0,128,0,-1--1--1,,1|(1243,260)|
+10,52,PPP 1980,1563,704,34,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,53,normalised PPP,1586,555,50,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,54,1,52,1,0,0,0,0,128,0,-1--1--1,,1|(1494,722)|
+1,55,52,53,1,0,0,0,0,128,0,-1--1--1,,1|(1561,627)|
+1,56,1,53,1,0,0,0,0,128,0,-1--1--1,,1|(1432,663)|
+1,57,53,18,1,0,0,0,0,128,0,-1--1--1,,1|(1440,445)|
+10,58,max EEE desired,1580,380,54,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,59,58,18,1,0,0,0,0,128,0,-1--1--1,,1|(1471,368)|
+10,60,R EEE per adopter,1803,383,35,19,8,3,0,4,0,0,0,0,-1--1--1,255-128-192,|12||0-0-0,0,0,0,0,0,0
+1,61,60,58,1,0,0,0,0,128,0,-1--1--1,,1|(1707,381)|
+10,62,recurrent purchases to replace,992,158,62,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,63,additional purchases,1203,226,32,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,64,62,32,1,0,0,0,0,128,0,-1--1--1,,1|(986,204)|
+1,65,63,32,1,0,0,0,0,128,0,-1--1--1,,1|(1101,246)|
+10,66,time to realise additional need,1070,316,48,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,67,66,63,1,0,0,0,0,128,0,-1--1--1,,1|(1154,297)|
+1,71,47,44,0,0,0,0,0,128,0,-1--1--1,,1|(623,572)|
+10,72,initial adopters fraction,625,724,51,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,73,72,36,0,0,0,0,0,128,0,-1--1--1,,1|(702,675)|
+10,74,total households,1207,721,60,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,75,74,24,1,0,0,0,0,128,0,-1--1--1,,1|(1259,655)|
+1,76,74,26,1,0,0,0,0,128,0,-1--1--1,,1|(1156,674)|
+1,77,74,16,1,0,0,0,0,128,0,-1--1--1,,1|(1031,613)|
+10,78,TIME STEP,307,637,50,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,79,78,9,0,0,0,0,0,64,0,-1--1--1,,1|(305,571)|
+10,80,First use EEE,1629,250,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,81,80,8,0,0,0,0,0,64,0,-1--1--1,,1|(1548,238)|
+10,82,Second use EEE,1437,131,42,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,83,82,8,0,0,0,0,0,64,0,-1--1--1,,1|(1444,175)|
+10,84,disposal of EEE as WEEE,1088,54,65,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,85,84,62,0,0,0,0,0,64,0,-1--1--1,,1|(1044,100)|
+10,86,TIME STEP,1089,397,50,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,87,86,66,0,0,0,0,0,64,0,-1--1--1,,1|(1082,367)|
+10,88,total households,791,727,60,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,89,88,36,0,0,0,0,0,128,0,-1--1--1,,1|(791,683)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*2. EEE and WEEE flows
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,5,2
+11,1,0,1238,296,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,2,EEE commissioning,1238,323,46,19,40,131,0,4,-1,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,3,Available used EEE,1842,300,55,22,3,131,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,4,First use EEE,1378,301,57,21,3,131,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,5,Processed material,1079,294,40,20,3,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,6,1,4,4,0,0,22,0,0,0,-1--1--1,,1|(1282,296)|
+1,7,1,5,100,0,0,22,0,0,0,-1--1--1,,1|(1175,296)|
+1,8,9,5,4,0,0,22,0,0,0,-1--1--1,,3|(1290,992)|(1290,992)|(1079,992)|
+11,9,3016,1611,992,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,10,WEEE recycling,1611,1011,52,11,40,3,0,4,-1,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,11,Raw material,846,301,40,20,3,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,12,14,5,4,0,0,22,0,0,0,-1--1--1,,1|(1003,297)|
+1,13,14,11,100,0,0,22,0,0,0,-1--1--1,,1|(921,297)|
+11,14,3918,962,297,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,15,extraction,962,316,32,11,40,3,0,4,-1,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,16,EEE average unit weight,1149,707,47,19,8,3,0,4,0,0,0,0,-1--1--1,192-255-255,|12||0-0-0,0,0,0,0,0,0
+10,17,time to extract,907,226,45,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,18,17,14,1,0,0,0,0,64,0,-1--1--1,,1|(952,250)|
+1,19,16,5,1,0,0,0,0,64,0,-1--1--1,,1|(1121,390)|
+10,20,distribution time,1265,454,50,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,21,recycling time,1517,1117,43,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,22,21,10,1,0,0,0,0,64,0,-1--1--1,,1|(1528,1096)|
+10,23,Second use EEE,1848,137,40,20,3,3,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+1,24,26,23,4,0,0,22,0,0,0,-1--1--1,,1|(1876,193)|
+1,25,26,3,100,0,0,22,0,0,0,-1--1--1,,1|(1876,259)|
+11,26,1124,1876,235,8,6,33,3,0,0,4,0,0,0,0,0,0,0,0,0
+10,27,second use commissioning,1930,235,46,19,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,28,30,3,4,0,0,22,0,0,0,-1--1--1,,1|(1817,248)|
+1,29,30,23,100,0,0,22,0,0,0,-1--1--1,,1|(1817,182)|
+11,30,882,1817,213,8,6,33,3,0,0,4,0,0,0,0,0,0,0,0,0
+10,31,second use decommissioning,1861,213,54,19,40,3,0,0,2,0,0,0,0,0,0,0,0,0
+1,32,3,27,1,0,0,0,0,64,0,-1--1--1,,1|(1924,262)|
+1,33,35,3,4,0,0,22,0,0,0,-1--1--1,,1|(1707,302)|
+1,34,35,4,100,0,0,22,0,0,0,-1--1--1,,1|(1525,302)|
+11,35,3698,1622,302,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,36,first use decommissioning because faulty,1622,337,54,28,40,131,0,0,-1,0,0,0,0,0,0,0,0,0
+1,37,4,36,1,0,0,0,0,64,0,-1--1--1,,1|(1505,352)|
+10,38,time to make available,1706,259,42,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,39,23,30,1,0,0,0,0,64,0,-1--1--1,,1|(1836,187)|
+10,40,redistribution time,2018,126,56,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,41,distribution time,2044,32,51,22,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,42,41,40,1,0,0,0,0,64,0,-1--1--1,,1|(2051,72)|
+10,43,WEEE before treatment,1916,994,43,26,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,44,46,43,4,0,0,22,0,0,0,-1--1--1,,1|(1913,766)|
+1,45,46,3,100,0,0,22,0,0,0,-1--1--1,,1|(1913,300)|
+11,46,1080,1913,559,8,6,33,3,0,0,4,0,0,0,0,0,0,0,0,0
+10,47,disposal of EEE as WEEE,1981,559,60,19,40,3,0,4,-1,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,48,collection time,2041,702,45,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,49,48,47,1,0,0,0,0,64,0,-1--1--1,,1|(2006,645)|
+10,50,distribution time,2206,738,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,51,50,48,1,0,0,0,0,64,0,-1--1--1,,1|(2103,742)|
+1,52,43,9,1,0,0,0,0,64,0,-1--1--1,,1|(1741,949)|
+10,53,EEE average unit weight,1727,903,52,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,54,53,43,1,0,0,0,0,64,0,-1--1--1,,1|(1798,933)|
+1,55,57,4,4,0,0,22,0,0,0,-1--1--1,,3|(1335,740)|(1335,740)|(1335,531)|
+1,56,57,3,100,0,0,22,0,0,0,-1--1--1,,1|(1842,740)|
+11,57,1058,1614,740,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,58,remanufacturing,1614,759,50,11,40,3,0,4,-1,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,59,remanufacturability EEE,1249,779,70,22,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,60,59,127,1,0,0,0,0,64,0,-1--1--1,,1|(1274,817)|
+10,61,reman time,1810,774,35,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,62,distribution time,1833,867,48,20,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,63,62,61,1,0,0,0,0,64,0,-1--1--1,,1|(1794,810)|
+10,64,Non recycled WEEE,2159,993,52,23,3,131,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+1,65,66,64,4,0,0,22,0,0,0,-1--1--1,,1|(2067,987)|
+11,66,4028,2021,987,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,67,WEEE not recycled,2021,1014,41,19,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,68,66,43,100,0,0,22,0,0,0,-1--1--1,,1|(1987,987)|
+10,69,distribution time,1352,1169,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,70,69,21,1,0,0,0,0,64,0,-1--1--1,,1|(1413,1137)|
+1,71,43,66,1,0,0,0,0,64,0,-1--1--1,,1|(1956,945)|
+1,72,58,127,1,0,0,0,0,128,0,-1--1--1,,1|(1398,811)|
+10,73,expected EEE demand,817,561,46,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,74,adjustment for stock of Processed material,680,411,73,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,75,distribution time,593,612,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,76,75,73,1,0,0,0,0,128,0,-1--1--1,,1|(650,573)|
+10,77,Processed material,494,473,39,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,78,77,74,1,0,0,0,0,128,0,-1--1--1,,1|(585,463)|
+10,79,EEE average unit weight,750,685,52,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,80,79,73,1,0,0,0,0,128,0,-1--1--1,,1|(793,637)|
+10,81,desired stock of processed material,666,513,60,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,82,81,74,1,0,0,0,0,128,0,-1--1--1,,1|(686,471)|
+10,83,desired extraction rate,949,492,46,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,84,extraction rate considering minimum stock,872,387,66,28,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,85,73,83,1,0,0,0,0,128,0,-1--1--1,,1|(852,512)|
+1,86,83,84,1,0,0,0,0,128,0,-1--1--1,,1|(942,429)|
+1,87,74,84,0,0,0,0,0,128,0,-1--1--1,,1|(772,399)|
+1,88,84,15,1,0,0,0,0,128,0,-1--1--1,,1|(955,355)|
+1,89,73,81,1,0,0,0,0,128,0,-1--1--1,,1|(765,523)|
+1,90,75,81,1,0,0,0,0,128,0,-1--1--1,,1|(596,565)|
+10,91,distribution time,735,220,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,92,91,17,1,0,0,0,0,128,0,-1--1--1,,1|(830,215)|
+10,93,distribution time,1557,166,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,94,93,38,1,0,0,0,0,128,0,-1--1--1,,1|(1589,225)|
+10,95,TIME STEP,1260,603,50,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,96,95,20,1,0,0,0,0,128,0,-1--1--1,,1|(1265,518)|
+1,97,38,35,1,0,0,0,0,128,0,-1--1--1,,1|(1640,269)|
+1,98,38,31,0,0,0,0,0,64,0,-1--1--1,,1|(1770,240)|
+1,99,40,27,0,0,0,0,0,64,0,-1--1--1,,1|(1981,171)|
+1,100,102,3,4,0,0,22,0,0,0,-1--1--1,,3|(1801,608)|(1801,608)|(1801,465)|
+1,101,102,4,100,0,0,22,0,0,0,-1--1--1,,1|(1378,608)|
+11,102,134,1589,608,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,103,first use decommissioning before broken,1589,635,55,28,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,104,fraction of decomissioned before broken,1505,415,75,28,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,105,104,102,1,0,0,0,0,128,0,-1--1--1,,1|(1522,488)|
+1,106,104,36,1,0,0,0,0,128,0,-1--1--1,,1|(1596,391)|
+10,107,time to make available,1435,552,46,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,108,4,102,1,0,0,0,0,128,0,-1--1--1,,1|(1424,422)|
+1,109,107,102,1,0,0,0,0,128,0,-1--1--1,,1|(1524,590)|
+10,110,recyclability EEE,1645,1165,53,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,111,110,10,1,0,0,0,0,128,0,-1--1--1,,1|(1636,1111)|
+1,112,10,130,1,0,0,0,0,128,0,-1--1--1,,1|(1740,1098)|
+1,113,110,130,1,0,0,0,0,128,0,-1--1--1,,1|(1852,1194)|
+10,114,initial stock of raw material,702,294,58,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,115,114,11,1,0,0,0,0,128,1,-1--1--1,,1|(776,312)|
+10,116,expected material kept in the system,963,603,57,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,117,WEEE recycling,854,781,33,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,118,remanufacturing,959,780,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,119,reman time,1028,826,44,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,120,recycling time,815,733,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,121,120,116,1,0,0,0,0,128,0,-1--1--1,,1|(874,677)|
+1,122,117,116,1,0,0,0,0,128,0,-1--1--1,,1|(922,701)|
+1,123,118,116,1,0,0,0,0,128,0,-1--1--1,,1|(987,689)|
+1,124,119,116,1,0,0,0,0,128,0,-1--1--1,,1|(1070,711)|
+1,125,116,83,1,0,0,0,0,128,0,-1--1--1,,1|(956,578)|
+1,126,79,116,1,0,0,0,0,128,0,-1--1--1,,1|(849,622)|
+10,127,recycling of EEE from remanufacturing process,1308,874,77,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,128,127,9,1,0,0,0,0,128,0,-1--1--1,,1|(1473,938)|
+1,129,53,127,1,0,0,0,0,128,0,-1--1--1,,1|(1546,916)|
+10,130,non recycled WEEE because of recyclability,1921,1168,74,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,131,48,66,1,0,0,0,0,128,0,-1--1--1,,1|(2010,849)|
+1,132,130,67,1,0,0,0,0,128,0,-1--1--1,,1|(1998,1100)|
+10,133,desired stock lenght of processed material,455,545,72,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,134,133,81,1,0,0,0,0,128,0,-1--1--1,,1|(530,519)|
+10,135,stock adjustment time,478,369,54,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,136,135,74,1,0,0,0,0,128,0,-1--1--1,,1|(601,360)|
+1,137,3,57,1,0,0,0,0,128,0,-1--1--1,,1|(1828,617)|
+1,138,3,47,1,0,0,0,0,128,0,-1--1--1,,1|(1983,437)|
+1,139,59,58,1,0,0,0,0,128,0,-1--1--1,,1|(1403,757)|
+1,140,61,58,1,0,0,0,0,128,0,-1--1--1,,1|(1739,763)|
+10,141,initial stock of processed material,1029,199,60,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,142,141,5,1,0,0,0,0,128,1,-1--1--1,,1|(1051,239)|
+10,143,initial stock of first use EEE,1321,212,58,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,144,143,4,1,0,0,0,0,128,1,-1--1--1,,1|(1344,242)|
+10,145,initial stock of available used EEE,2042,339,80,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,146,145,3,1,0,0,0,0,128,1,-1--1--1,,1|(1961,297)|
+10,147,initial stock of second use EEE,1879,41,52,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,148,147,23,1,0,0,0,0,128,1,-1--1--1,,1|(1874,90)|
+10,149,initial stock of WEEE before treatment,1865,1082,68,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,150,149,43,1,0,0,0,0,128,1,-1--1--1,,1|(1894,1052)|
+10,151,initial stock of non recycled WEEE,2299,928,75,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,152,151,64,1,0,0,0,0,128,1,-1--1--1,,1|(2268,966)|
+1,153,20,2,1,0,0,0,0,128,0,-1--1--1,,1|(1268,399)|
+10,154,EEE demand,1163,181,51,11,8,2,0,3,-1,0,0,0,128-128-128,192-255-192,|12||128-128-128,0,0,0,0,0,0
+1,155,154,2,0,0,0,0,0,64,0,-1--1--1,,1|(1194,241)|
+10,156,EEE demand,1443,695,51,11,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,157,EEE demand,663,658,51,11,8,2,0,3,-1,0,0,0,128-128-128,192-255-192,|12||128-128-128,0,0,0,0,0,0
+1,158,157,73,0,0,0,0,0,64,0,-1--1--1,,1|(727,617)|
+10,159,decommissioning probability in the end of life for second use,1671,42,86,28,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,160,159,31,1,0,0,0,0,128,0,-1--1--1,,1|(1722,127)|
+10,161,decommissioning probability in the end of life for first use,1429,98,86,28,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,162,161,35,1,0,0,0,0,128,0,-1--1--1,,1|(1481,212)|
+10,163,fraction introduced to second use market,2151,254,73,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,164,163,27,0,0,0,0,0,64,0,-1--1--1,,1|(2033,243)|
+10,165,fraction introduced to WEEE market,2198,560,73,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,166,165,47,0,0,0,0,0,64,0,-1--1--1,,1|(2089,559)|
+10,167,expected lifetime for decommissioning before broken,1645,478,77,28,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,168,167,103,0,0,0,0,0,64,0,-1--1--1,,1|(1619,549)|
+10,169,fraction introduced to reman market,1551,850,73,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,170,169,58,0,0,0,0,0,64,0,-1--1--1,,1|(1581,806)|
+10,171,fraction of WEEE formally collected,1348,1075,61,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,172,171,10,0,0,0,0,0,64,0,-1--1--1,,1|(1480,1043)|
+10,173,fraction of WEEE not formally collected,2165,861,73,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,174,173,67,0,0,0,0,0,64,0,-1--1--1,,1|(2097,932)|
+1,175,156,57,1,0,0,0,0,128,0,-1--1--1,,1|(1578,706)|
+1,176,9,43,100,0,0,22,0,0,0,-1--1--1,,3|(1629,992)|(1629,994)|(1751,994)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*3. (de) Commissioning and restauration probabilit
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,61,2
+10,1,decommissioning probability in the end of life for first use,221,411,86,28,8,3,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,2,weibull shape,217,282,43,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,3,weibull scale,321,288,40,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,4,2,1,1,0,0,0,0,64,0,-1--1--1,,1|(209,329)|
+1,5,3,1,1,0,0,0,0,64,0,-1--1--1,,1|(290,344)|
+10,6,mean lifetime,281,201,41,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,7,2,6,1,0,0,0,0,64,0,-1--1--1,,1|(234,229)|
+1,8,3,6,0,0,0,0,0,64,0,-1--1--1,,1|(303,250)|
+10,9,average EEE age,101,274,46,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,10,9,1,1,0,0,0,0,64,0,-1--1--1,,1|(146,340)|
+10,11,lifetime ratio,416,153,39,11,8,3,0,4,0,0,0,0,-1--1--1,192-128-192,|12||0-0-0,0,0,0,0,0,0
+1,12,11,3,0,0,0,0,0,64,0,-1--1--1,,1|(372,214)|
+10,13,decommissioning probability in the end of life for second use,297,1034,90,28,8,3,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,14,average second use EEE age,103,879,67,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,15,14,13,1,0,0,0,0,64,0,-1--1--1,,1|(189,954)|
+10,16,weibull shape,261,855,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,17,weibull scale,403,866,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,18,16,13,1,0,0,0,0,128,0,-1--1--1,,1|(265,928)|
+1,19,17,13,1,0,0,0,0,128,0,-1--1--1,,1|(385,937)|
+10,20,fraction fit for second use,1009,604,43,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,21,second use infrastructure level,806,303,58,19,8,3,0,4,0,0,0,0,-1--1--1,192-128-192,|12||0-0-0,0,0,0,0,0,0
+1,22,20,28,1,0,0,0,0,64,0,-1--1--1,,1|(913,575)|
+10,23,second hand market coverage,817,425,65,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,24,21,23,1,0,0,0,0,64,0,-1--1--1,,1|(808,357)|
+1,25,23,28,1,0,0,0,0,64,0,-1--1--1,,1|(800,550)|
+10,26,expected lifetime for second use,1109,721,65,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,27,26,20,1,0,0,0,0,64,0,-1--1--1,,1|(1028,638)|
+10,28,fraction introduced to second use market,819,613,68,19,8,3,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,29,repair effectiveness,1001,425,60,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,30,29,33,1,0,0,0,0,64,0,-1--1--1,,1|(987,494)|
+10,31,repairing infrastructure level,1080,358,58,19,8,3,0,4,0,0,0,0,-1--1--1,192-128-192,|12||0-0-0,0,0,0,0,0,0
+1,32,31,29,1,0,0,0,0,64,0,-1--1--1,,1|(1025,383)|
+10,33,virtual age after repair,1029,510,49,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,34,33,20,1,0,0,0,0,64,0,-1--1--1,,1|(977,545)|
+10,35,SU desired level,741,174,52,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,36,SU desired year,983,204,51,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,37,35,21,1,0,0,0,0,128,0,-1--1--1,,1|(767,251)|
+1,38,36,21,1,0,0,0,0,128,0,-1--1--1,,1|(885,276)|
+10,39,SU initial level,619,172,45,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,40,39,21,1,0,0,0,0,128,0,-1--1--1,,1|(675,259)|
+10,41,R initial level,1080,257,40,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,42,R desired level,1184,219,47,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,43,R desired year,1327,351,46,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,44,41,31,1,0,0,0,0,128,0,-1--1--1,,1|(1056,305)|
+1,45,42,31,1,0,0,0,0,128,0,-1--1--1,,1|(1152,282)|
+1,46,43,31,1,0,0,0,0,128,0,-1--1--1,,1|(1202,380)|
+10,47,switch infra development,861,79,41,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,48,47,21,1,0,0,0,0,128,0,-1--1--1,,1|(856,188)|
+10,49,lifetime fraction for second use,1316,707,59,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,50,49,26,1,0,0,0,0,128,0,-1--1--1,,1|(1194,690)|
+10,51,infra development initial year,943,139,57,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,52,51,21,1,0,0,0,0,128,0,-1--1--1,,1|(879,215)|
+10,53,switch infra development,1291,187,46,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,54,infra development initial year,1364,250,61,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,55,53,31,1,0,0,0,0,128,0,-1--1--1,,1|(1214,307)|
+1,56,54,31,1,0,0,0,0,128,0,-1--1--1,,1|(1251,337)|
+10,57,average decommissioned EEE age,1344,460,69,28,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,58,57,33,1,0,0,0,0,64,0,-1--1--1,,1|(1178,504)|
+10,59,weibull scale,1226,633,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,60,weibull shape,1234,572,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,61,60,20,1,0,0,0,0,128,0,-1--1--1,,1|(1134,570)|
+1,62,59,20,1,0,0,0,0,128,0,-1--1--1,,1|(1157,636)|
+10,63,mean lifetime,1261,788,50,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,64,63,26,1,0,0,0,0,128,0,-1--1--1,,1|(1161,755)|
+10,65,expected lifetime for decommissioning before broken,170,661,77,28,8,3,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,66,lifetime fraction for decommissioning before broken,275,732,77,28,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,67,66,65,1,0,0,0,0,128,0,-1--1--1,,1|(272,674)|
+10,68,mean lifetime,320,579,50,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,69,68,65,1,0,0,0,0,128,0,-1--1--1,,1|(234,597)|
+10,70,remanufacturing infrastructure level,1944,236,58,19,8,3,0,4,0,0,0,0,-1--1--1,192-128-192,|12||0-0-0,0,0,0,0,0,0
+10,71,reman effectiveness,2040,342,41,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,72,lifetime expected for reman products,2127,645,65,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,73,70,71,1,0,0,0,0,64,0,-1--1--1,,1|(1959,297)|
+10,74,fraction fit for reman,2041,547,43,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,75,72,74,1,0,0,0,0,64,0,-1--1--1,,1|(2053,602)|
+1,76,71,78,1,0,0,0,0,64,0,-1--1--1,,1|(2039,374)|
+1,77,74,81,1,0,0,0,0,64,0,-1--1--1,,1|(1927,481)|
+10,78,virtual age after reman,2030,462,49,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,79,78,74,1,0,0,0,0,64,0,-1--1--1,,1|(2019,507)|
+10,80,reman market coverage,1875,339,44,19,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,81,fraction introduced to reman market,1820,517,68,19,8,3,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+1,82,80,81,1,0,0,0,0,128,0,-1--1--1,,1|(1821,427)|
+10,83,RM desired level,1962,90,54,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,84,RM desired year,2263,216,53,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,85,RM initial level,1825,122,47,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,86,85,70,1,0,0,0,0,128,0,-1--1--1,,1|(1899,202)|
+1,87,83,70,1,0,0,0,0,128,0,-1--1--1,,1|(1954,152)|
+1,88,84,70,1,0,0,0,0,128,0,-1--1--1,,1|(2099,244)|
+1,89,70,80,1,0,0,0,0,128,0,-1--1--1,,1|(1928,279)|
+10,90,lifetime fraction for reman products,2325,639,59,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,91,90,72,1,0,0,0,0,128,0,-1--1--1,,1|(2218,626)|
+10,92,virtual age after repair,534,933,54,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,93,92,13,1,0,0,0,0,128,0,-1--1--1,,1|(450,978)|
+10,94,fraction introduced to second use market,1620,351,73,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,95,94,81,1,0,0,0,0,128,0,-1--1--1,,1|(1690,448)|
+10,96,mean lifetime,2270,714,50,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,97,96,72,1,0,0,0,0,128,0,-1--1--1,,1|(2163,681)|
+10,98,weibull shape,2275,492,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,99,weibull scale,2288,556,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,100,98,74,1,0,0,0,0,128,0,-1--1--1,,1|(2141,485)|
+1,101,99,74,1,0,0,0,0,128,0,-1--1--1,,1|(2141,558)|
+10,102,average decommissioned EEE age,2277,346,69,28,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,103,102,78,1,0,0,0,0,128,0,-1--1--1,,1|(2149,412)|
+10,104,switch infra development,2146,65,46,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,105,infra development initial year,2298,93,61,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,106,104,70,1,0,0,0,0,128,0,-1--1--1,,1|(2041,189)|
+1,107,105,70,1,0,0,0,0,128,0,-1--1--1,,1|(2169,198)|
+10,108,fraction introduced to WEEE market,1732,897,68,19,8,3,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,109,fraction introduced to reman market,1812,729,73,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,110,fraction introduced to second use market,1534,826,73,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,111,110,108,1,0,0,0,0,128,0,-1--1--1,,1|(1594,863)|
+1,112,109,108,1,0,0,0,0,128,0,-1--1--1,,1|(1787,810)|
+10,113,fraction of WEEE formally collected,2002,1044,57,19,8,3,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,114,recycling infrastructure level,2260,1030,58,19,8,3,0,4,0,0,0,0,-1--1--1,192-128-192,|12||0-0-0,0,0,0,0,0,0
+1,115,114,113,1,0,0,0,0,64,0,-1--1--1,,1|(2117,1026)|
+10,116,RC initial level,2098,900,45,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,117,RC desired level,2184,859,52,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,118,RC desired year,2460,966,52,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,119,116,114,1,0,0,0,0,128,0,-1--1--1,,1|(2133,955)|
+1,120,117,114,1,0,0,0,0,128,0,-1--1--1,,1|(2203,913)|
+1,121,118,114,1,0,0,0,0,128,0,-1--1--1,,1|(2387,1008)|
+10,122,switch infra development,2317,825,46,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,123,infra development initial year,2458,848,61,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,124,122,114,1,0,0,0,0,128,0,-1--1--1,,1|(2313,889)|
+1,125,123,114,1,0,0,0,0,128,0,-1--1--1,,1|(2386,936)|
+10,126,fraction of WEEE not formally collected,1751,1054,69,19,8,3,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+1,127,113,126,1,0,0,0,0,64,0,-1--1--1,,1|(1888,1034)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*4. Ageing
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,5,3
+10,1,Total age of first use EEE,400,717,48,25,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,2,average EEE age,460,857,54,11,8,3,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+1,3,1,2,1,0,0,0,0,64,0,-1--1--1,,1|(408,792)|
+1,4,2,14,1,0,0,0,0,64,0,-1--1--1,,1|(489,798)|
+12,5,48,179,705,26,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,6,8,1,4,0,0,22,0,0,0,-1--1--1,,1|(318,706)|
+1,7,8,5,100,0,0,22,0,0,0,-1--1--1,,1|(238,706)|
+11,8,48,278,706,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,9,increase in age of first use EEE,278,733,55,19,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,10,48,629,717,26,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,11,13,10,4,0,0,22,0,0,0,-1--1--1,,1|(570,717)|
+1,12,13,1,100,0,0,22,0,0,0,-1--1--1,,1|(486,717)|
+11,13,48,531,717,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,14,decrease in age of first use EEE,531,744,58,19,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,15,rate of ageing,50,771,43,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,16,15,9,1,0,0,0,0,128,0,-1--1--1,,1|(151,754)|
+10,17,First use EEE,97,830,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,18,17,9,0,0,0,0,0,64,0,-1--1--1,,1|(173,788)|
+10,19,remanufacturing,89,583,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,20,19,8,0,0,0,0,0,64,0,-1--1--1,,1|(182,644)|
+10,21,first use decommissioning because faulty,434,562,54,28,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,22,21,13,0,0,0,0,0,64,0,-1--1--1,,1|(485,644)|
+10,23,first use decommissioning before broken,590,565,77,28,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,24,23,13,0,0,0,0,0,64,0,-1--1--1,,1|(559,645)|
+10,25,First use EEE,293,912,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,26,25,2,0,0,0,0,0,64,0,-1--1--1,,1|(369,886)|
+10,27,average decommissioned EEE age,1453,901,80,19,8,3,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,28,Total age of available used EEE,1375,731,54,25,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,29,28,27,1,0,0,0,0,64,0,-1--1--1,,1|(1376,822)|
+1,30,27,40,1,0,0,0,0,64,0,-1--1--1,,1|(1447,831)|
+12,31,48,1151,732,26,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,32,34,28,4,0,0,22,0,0,0,-1--1--1,,1|(1288,732)|
+1,33,34,31,100,0,0,22,0,0,0,-1--1--1,,1|(1210,732)|
+11,34,48,1249,732,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,35,increase in age of available used EEE,1249,759,61,19,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,36,48,1619,733,26,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,37,39,36,4,0,0,22,0,0,0,-1--1--1,,1|(1553,737)|
+1,38,39,28,100,0,0,22,0,0,0,-1--1--1,,1|(1465,737)|
+11,39,48,1508,737,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,40,decrease in age of available used EEE,1508,764,61,19,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,41,Available used EEE,1092,935,52,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,42,41,35,0,0,0,0,0,64,0,-1--1--1,,1|(1165,852)|
+10,43,first use decommissioning because faulty,890,845,54,28,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,44,43,35,0,0,0,0,0,64,0,-1--1--1,,1|(1059,804)|
+10,45,first use decommissioning before broken,947,628,77,28,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,46,45,34,0,0,0,0,0,64,0,-1--1--1,,1|(1126,689)|
+10,47,second use decommissioning,1222,500,59,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,48,47,34,0,0,0,0,0,64,0,-1--1--1,,1|(1235,615)|
+10,49,rate of ageing,996,877,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,50,49,35,0,0,0,0,0,128,0,-1--1--1,,1|(1107,824)|
+10,51,average EEE age,915,764,46,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,52,51,35,1,0,0,0,0,128,0,-1--1--1,,1|(1067,761)|
+10,53,disposal of EEE as WEEE,1657,535,65,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,54,53,39,0,0,0,0,0,64,0,-1--1--1,,1|(1581,637)|
+10,55,remanufacturing,1750,590,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,56,55,39,0,0,0,0,0,64,0,-1--1--1,,1|(1628,663)|
+10,57,second use commissioning,1544,519,51,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,58,57,39,0,0,0,0,0,64,0,-1--1--1,,1|(1525,627)|
+10,59,Available used EEE,1294,974,52,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,60,59,27,0,0,0,0,0,64,0,-1--1--1,,1|(1366,940)|
+10,61,Total time of second use EEE,2211,744,53,27,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+12,62,48,1963,741,26,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,63,65,61,4,0,0,22,0,0,0,-1--1--1,,1|(2117,744)|
+1,64,65,62,100,0,0,22,0,0,0,-1--1--1,,1|(2026,744)|
+11,65,48,2070,744,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,66,increase in age of second use EEE,2070,771,55,19,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,67,48,2463,742,26,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,68,70,67,4,0,0,22,0,0,0,-1--1--1,,1|(2391,738)|
+1,69,70,61,100,0,0,22,0,0,0,-1--1--1,,1|(2298,738)|
+11,70,48,2339,738,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,71,decrease in age of second use EEE,2339,765,58,19,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,72,second use commissioning,1934,626,51,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,73,72,65,0,0,0,0,0,64,0,-1--1--1,,1|(2004,687)|
+10,74,Second use EEE,1882,926,42,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,75,74,66,0,0,0,0,0,64,0,-1--1--1,,1|(1970,852)|
+10,76,rate of ageing,1885,853,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,77,76,66,0,0,0,0,0,128,0,-1--1--1,,1|(1961,818)|
+10,78,second use decommissioning,2403,613,59,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,79,78,71,0,0,0,0,0,64,0,-1--1--1,,1|(2373,682)|
+10,80,average second use EEE age,2286,903,62,19,8,3,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+10,81,Second use EEE,2128,960,42,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,82,81,80,0,0,0,0,0,64,0,-1--1--1,,1|(2194,935)|
+1,83,61,80,0,0,0,0,0,64,0,-1--1--1,,1|(2246,821)|
+1,84,80,71,0,0,0,0,0,64,0,-1--1--1,,1|(2309,840)|
+10,85,average second use EEE age,1365,529,67,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,86,85,34,0,0,0,0,0,128,0,-1--1--1,,1|(1306,630)|
+10,87,average age of useful products,1460,261,48,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,88,First use EEE,1368,159,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,89,88,87,0,0,0,0,0,64,0,-1--1--1,,1|(1404,200)|
+10,90,Second use EEE,1527,176,42,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,91,90,87,0,0,0,0,0,64,0,-1--1--1,,1|(1497,213)|
+10,92,average second use EEE age,1605,339,67,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,93,average EEE age,1300,328,46,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,94,93,87,0,0,0,0,0,128,0,-1--1--1,,1|(1373,297)|
+1,95,92,87,0,0,0,0,0,128,0,-1--1--1,,1|(1538,303)|
+10,96,expected lifetime for decommissioning before broken,752,595,77,28,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,97,96,13,0,0,0,0,0,64,0,-1--1--1,,1|(625,665)|
+10,98,virtual age after reman,210,537,54,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,99,98,8,0,0,0,0,0,64,0,-1--1--1,,1|(243,621)|
+10,100,expected lifetime for decommissioning before broken,1042,558,77,28,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,101,100,34,0,0,0,0,0,64,0,-1--1--1,,1|(1154,652)|
+10,102,virtual age after repair,2050,579,54,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,103,102,65,0,0,0,0,0,64,0,-1--1--1,,1|(2059,661)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*5. Calibration and tests
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,5,2
+10,1,historic EEE put on market,15,-574,61,19,8,3,0,4,0,0,0,0,-1--1--1,192-255-255,|12||0-0-0,0,0,0,0,0,0
+10,2,WEEE average market value,1809,-152,49,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,3,total value of Available WEEE,1951,-214,49,24,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,4,2,3,1,0,0,0,0,64,0,-1--1--1,,1|(1875,-170)|
+10,5,historic disposal of EEE,147,-192,51,19,8,3,0,4,0,0,0,0,-1--1--1,192-255-255,|12||0-0-0,0,0,0,0,0,0
+12,6,0,573,-533,150,150,3,44,0,0,1,0,0,0,0,0,0,0,0,0
+EEE_in_use_fit
+12,7,0,983,-654,80,20,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+lifetime ratio,0,20,0.05
+12,8,0,981,-582,80,20,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+R initial level,0,4,0.05
+12,9,0,989,-253,80,20,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+#first use decommissioning because faulty>DELAY1#,0,4,1
+12,10,0,990,-188,80,20,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+#expected material kept in the system>SMOOTH#,0,4,1
+12,11,0,993,-107,80,20,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+#WEEE recycling>DELAY1>LV1#,0,4,1
+12,12,0,388,-212,150,150,3,44,0,0,1,0,0,0,0,0,0,0,0,0
+EEE_disposal_fit
+12,13,0,985,-508,80,20,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+fraction of decomissioned before broken,0,0.5,0.02
+12,14,0,991,-430,80,20,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+#remanufacturing>DELAY1#,0,0.7,0.025
+12,15,0,244,-535,150,150,3,44,0,0,1,0,0,0,0,0,0,0,0,0
+EEE_commissioning_fit
+10,16,count,2059,868,20,11,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|12|B|0-0-0,0,0,0,0,0,0
+10,17,dt,2116,968,8,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,18,17,16,0,0,0,0,0,0,0,-1--1--1,,1|(2090,924)|
+10,19,pick,2013,972,15,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,20,19,16,0,0,0,0,0,0,0,-1--1--1,,1|(2032,926)|
+10,21,Y,1665,924,8,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,22,21,19,0,0,0,0,0,0,0,-1--1--1,,1|(1828,946)|
+10,23,historical time series,1639,991,66,22,8,131,0,0,-1,0,0,0,0,0,0,0,0,0
+1,24,23,21,0,0,0,0,0,0,0,-1--1--1,,1|(1651,958)|
+10,25,dif cov,1478,482,24,11,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|12|B|0-0-0,0,0,0,0,0,0
+10,26,r,1400,566,5,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,27,26,25,0,0,0,0,0,0,0,-1--1--1,,1|(1431,532)|
+10,28,Sx,1487,596,10,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,29,28,25,0,0,0,0,0,0,0,-1--1--1,,1|(1483,545)|
+10,30,Sy,1574,579,10,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,31,30,25,0,0,0,0,0,0,0,-1--1--1,,1|(1530,535)|
+10,32,M X,1343,672,17,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,33,32,26,0,0,0,0,0,0,0,-1--1--1,,1|(1368,624)|
+10,34,M Y,1395,734,17,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,35,34,26,0,0,0,0,0,0,0,-1--1--1,,1|(1396,656)|
+10,36,Mxy,1444,675,16,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,37,36,26,0,0,0,0,0,0,0,-1--1--1,,1|(1424,626)|
+1,38,28,26,0,0,0,0,0,0,0,-1--1--1,,1|(1447,582)|
+1,39,30,26,0,0,0,0,0,0,0,-1--1--1,,1|(1491,573)|
+1,40,16,32,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(1706,771)|
+10,41,Sum Xi,1326,769,25,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,42,41,32,0,0,0,0,0,0,0,-1--1--1,,1|(1332,727)|
+1,43,17,41,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(1736,872)|
+10,44,Xi,1317,829,9,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,45,44,41,0,0,0,0,0,0,0,-1--1--1,,1|(1319,805)|
+1,46,19,44,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(1668,900)|
+10,47,X,1308,888,8,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,48,47,44,0,0,0,0,0,0,0,-1--1--1,,1|(1310,865)|
+10,49,simulated time series,1303,947,71,15,8,131,0,0,-1,0,0,0,0,0,0,0,0,0
+1,50,49,47,0,0,0,0,0,0,0,-1--1--1,,1|(1304,922)|
+1,51,16,34,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(1732,801)|
+10,52,Sum Yi,1524,830,25,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,53,52,34,0,0,0,0,0,0,0,-1--1--1,,1|(1465,786)|
+1,54,17,52,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(1835,902)|
+10,55,Yi,1670,846,9,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,56,55,52,0,0,0,0,0,0,0,-1--1--1,,1|(1611,839)|
+1,57,19,55,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(1845,910)|
+1,58,21,55,0,0,0,0,0,0,0,-1--1--1,,1|(1666,891)|
+1,59,16,36,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(1756,773)|
+10,60,SumXY,1494,719,27,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,61,60,36,0,0,0,0,0,0,0,-1--1--1,,1|(1474,701)|
+1,62,17,60,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(1820,849)|
+1,63,44,60,0,0,0,0,0,0,0,-1--1--1,,1|(1395,780)|
+1,64,55,60,0,0,0,0,0,0,0,-1--1--1,,1|(1590,789)|
+1,65,32,28,0,0,0,0,0,0,0,-1--1--1,,1|(1412,635)|
+10,66,MX2,1543,676,19,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,67,66,28,0,0,0,0,0,0,0,-1--1--1,,1|(1519,641)|
+1,68,16,66,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(1807,774)|
+10,69,SumX2,1619,774,25,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,70,69,66,0,0,0,0,0,0,0,-1--1--1,,1|(1585,730)|
+1,71,17,69,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(1882,876)|
+1,72,44,69,0,0,0,0,0,0,0,-1--1--1,,1|(1453,804)|
+1,73,34,30,0,0,0,0,0,0,0,-1--1--1,,1|(1480,659)|
+10,74,MY2,1715,672,19,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,75,74,30,0,0,0,0,0,0,0,-1--1--1,,1|(1647,626)|
+1,76,16,74,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(1893,772)|
+10,77,SumY2,1708,734,25,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,78,77,74,0,0,0,0,0,0,0,-1--1--1,,1|(1710,709)|
+1,79,17,77,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(1923,857)|
+1,80,55,77,0,0,0,0,0,0,0,-1--1--1,,1|(1686,796)|
+10,81,dif mea,1194,696,27,11,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|12|B|0-0-0,0,0,0,0,0,0
+1,82,32,81,0,0,0,0,0,0,0,-1--1--1,,1|(1280,681)|
+1,83,34,81,0,0,0,0,0,0,0,-1--1--1,,1|(1306,717)|
+10,84,dif var,1589,491,24,11,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|12|B|0-0-0,0,0,0,0,0,0
+1,85,28,84,0,0,0,0,0,0,0,-1--1--1,,1|(1532,549)|
+1,86,30,84,0,0,0,0,0,0,0,-1--1--1,,1|(1579,541)|
+10,87,mape,1892,497,20,11,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|12|B|0-0-0,0,0,0,0,0,0
+1,88,16,87,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(1978,688)|
+10,89,Sum APE,1887,567,32,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,90,89,87,0,0,0,0,0,0,0,-1--1--1,,1|(1888,538)|
+1,91,17,89,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(2004,773)|
+1,92,44,89,0,0,0,0,0,0,0,-1--1--1,,1|(1588,704)|
+1,93,55,89,0,0,0,0,0,0,0,-1--1--1,,1|(1773,712)|
+10,94,mse,1261,414,16,11,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|12|B|0-0-0,0,0,0,0,0,0
+1,95,25,94,0,0,0,0,0,0,0,-1--1--1,,1|(1372,449)|
+1,96,81,94,0,0,0,0,0,0,0,-1--1--1,,1|(1225,561)|
+1,97,84,94,0,0,0,0,0,0,0,-1--1--1,,1|(1427,453)|
+10,98,r2,1332,532,9,11,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|12|B|0-0-0,0,0,0,0,0,0
+1,99,26,98,0,0,0,0,0,0,0,-1--1--1,,1|(1374,553)|
+10,100,residuals,1468,900,32,11,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|12|B|0-0-0,0,0,0,0,0,0
+1,101,44,100,0,0,0,0,0,0,0,-1--1--1,,1|(1378,857)|
+1,102,55,100,0,0,0,0,0,0,0,-1--1--1,,1|(1587,867)|
+10,103,rmse,1244,341,19,11,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|12|B|0-0-0,0,0,0,0,0,0
+1,104,94,103,0,0,0,0,0,0,0,-1--1--1,,1|(1254,384)|
+10,105,RMSPE,2057,502,30,11,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|12|B|0-0-0,0,0,0,0,0,0
+1,106,16,105,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(2058,691)|
+10,107,Sum SPE,2013,590,31,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,108,107,105,0,0,0,0,0,0,0,-1--1--1,,1|(2031,552)|
+1,109,17,107,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(2066,785)|
+1,110,44,107,0,0,0,0,0,0,0,-1--1--1,,1|(1647,715)|
+1,111,55,107,0,0,0,0,0,0,0,-1--1--1,,1|(1832,724)|
+10,112,uc,1372,341,10,11,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|12|B|0-0-0,0,0,0,0,0,0
+1,113,25,112,0,0,0,0,0,0,0,-1--1--1,,1|(1429,417)|
+1,114,94,112,0,0,0,0,0,0,0,-1--1--1,,1|(1313,379)|
+10,115,um,1124,347,12,11,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|12|B|0-0-0,0,0,0,0,0,0
+1,116,81,115,0,0,0,0,0,0,0,-1--1--1,,1|(1160,528)|
+1,117,94,115,0,0,0,0,0,0,0,-1--1--1,,1|(1196,382)|
+10,118,us,1520,342,10,11,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|12|B|0-0-0,0,0,0,0,0,0
+1,119,84,118,0,0,0,0,0,0,0,-1--1--1,,1|(1557,422)|
+1,120,94,118,0,0,0,0,0,0,0,-1--1--1,,1|(1386,378)|
+10,121,Sum XmY2,1699,554,38,11,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,122,17,121,0,0,0,0,1,0,0,192-255-255,|12||0-0-0,1|(1914,767)|
+1,123,44,121,0,0,0,0,0,0,0,-1--1--1,,1|(1498,698)|
+1,124,55,121,0,0,0,0,0,0,0,-1--1--1,,1|(1683,706)|
+1,125,19,100,0,0,0,0,1,64,0,192-255-255,|12||0-0-0,1|(1755,938)|
+1,126,47,19,1,0,0,0,0,64,0,-1--1--1,,1|(1500,939)|
+10,127,SSE,1706,500,16,11,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|12|B|0-0-0,0,0,0,0,0,0
+1,128,121,127,0,0,0,0,0,64,0,-1--1--1,,1|(1701,533)|
+10,129,"1 - us",1500,256,20,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,130,118,129,1,0,0,0,0,128,0,-1--1--1,,1|(1522,320)|
+10,131,WEEE before treatment,2053,-135,50,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,132,131,3,0,0,0,0,0,64,0,-1--1--1,,1|(2010,-168)|
+10,133,EEE commissioning,1292,1048,51,19,8,2,0,3,-1,0,0,0,128-128-128,192-255-192,|12||128-128-128,0,0,0,0,0,0
+1,134,133,49,0,0,0,0,0,64,0,-1--1--1,,1|(1296,1002)|
+10,135,historic EEE put on market,1622,1074,56,19,8,2,0,7,-1,0,0,0,128-128-128,192-255-255,|12||128-128-128,0,0,0,0,0,0
+1,136,135,23,0,0,0,0,0,128,0,-1--1--1,,1|(1628,1040)|
+10,137,TIME STEP,2123,1039,50,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,138,137,17,0,0,0,0,0,64,0,-1--1--1,,1|(2120,1010)|
+10,139,current stock of EEE,-882,435,50,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,140,Sum of all EEE inflows,-1134,527,60,27,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+12,141,48,-1390,525,26,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,142,144,140,4,0,0,22,0,0,0,-1--1--1,,1|(-1234,525)|
+1,143,144,141,100,0,0,22,0,0,0,-1--1--1,,1|(-1325,525)|
+11,144,48,-1279,525,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,145,EEE inflows,-1279,544,39,11,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,146,Sum of all EEE outflows,-1109,779,60,28,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+12,147,48,-1374,772,26,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,148,150,146,4,0,0,22,0,0,0,-1--1--1,,1|(-1211,772)|
+1,149,150,147,100,0,0,22,0,0,0,-1--1--1,,1|(-1307,772)|
+11,150,48,-1259,772,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,151,EEE outflows,-1259,791,43,11,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,152,mass balance EEE,-821,658,58,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,153,140,152,1,0,0,0,0,128,0,-1--1--1,,1|(-921,580)|
+1,154,146,152,1,0,0,0,0,128,0,-1--1--1,,1|(-901,723)|
+1,155,139,152,1,0,0,0,0,128,0,-1--1--1,,1|(-827,563)|
+10,156,initial stock of EEE,-851,827,59,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,157,156,152,1,0,0,0,0,128,0,-1--1--1,,1|(-815,729)|
+10,158,EEE commissioning,-1359,388,51,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,159,158,145,0,0,0,0,0,64,0,-1--1--1,,1|(-1321,463)|
+10,160,first use decommissioning because faulty,-1437,644,54,28,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,161,160,145,0,0,0,0,0,64,0,-1--1--1,,1|(-1351,589)|
+10,162,first use decommissioning before broken,-1596,645,77,28,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,163,162,145,0,0,0,0,0,64,0,-1--1--1,,1|(-1424,590)|
+10,164,remanufacturing,-1024,653,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,165,164,145,0,0,0,0,0,64,0,-1--1--1,,1|(-1146,601)|
+10,166,second use commissioning,-1313,649,51,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,167,166,145,0,0,0,0,0,64,0,-1--1--1,,1|(-1298,599)|
+10,168,second use decommissioning,-1172,647,59,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,169,168,145,0,0,0,0,0,64,0,-1--1--1,,1|(-1225,596)|
+10,170,disposal of EEE as WEEE,-1430,919,65,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,171,170,151,0,0,0,0,0,64,0,-1--1--1,,1|(-1346,855)|
+1,172,160,151,0,0,0,0,0,64,0,-1--1--1,,1|(-1344,721)|
+1,173,162,151,0,0,0,0,0,64,0,-1--1--1,,1|(-1415,723)|
+1,174,164,151,0,0,0,0,0,64,0,-1--1--1,,1|(-1136,717)|
+1,175,166,151,0,0,0,0,0,64,0,-1--1--1,,1|(-1288,717)|
+1,176,168,151,0,0,0,0,0,64,0,-1--1--1,,1|(-1215,717)|
+10,177,initial stock of available used EEE,-860,948,66,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,178,177,156,0,0,0,0,0,64,0,-1--1--1,,1|(-857,890)|
+10,179,initial stock of first use EEE,-1048,944,62,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,180,179,156,0,0,0,0,0,64,0,-1--1--1,,1|(-950,885)|
+10,181,initial stock of second use EEE,-705,950,57,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,182,181,156,0,0,0,0,0,64,0,-1--1--1,,1|(-778,888)|
+10,183,Available used EEE,-870,321,52,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,184,183,139,0,0,0,0,0,64,0,-1--1--1,,1|(-876,371)|
+10,185,First use EEE,-1030,324,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,186,185,139,0,0,0,0,0,64,0,-1--1--1,,1|(-968,371)|
+10,187,Second use EEE,-728,342,42,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,188,187,139,0,0,0,0,0,64,0,-1--1--1,,1|(-799,384)|
+10,189,Sum of all material inflows,45,576,59,22,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,190,Sum of all material outflows,38,830,59,21,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+12,191,48,-242,829,26,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,192,194,190,4,0,0,22,0,0,0,-1--1--1,,1|(-67,829)|
+1,193,194,191,100,0,0,22,0,0,0,-1--1--1,,1|(-171,829)|
+11,194,48,-119,829,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,195,material outflows,-119,848,53,11,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,196,48,-244,566,26,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,197,199,189,4,0,0,22,0,0,0,-1--1--1,,1|(-66,567)|
+1,198,199,196,100,0,0,22,0,0,0,-1--1--1,,1|(-174,567)|
+11,199,48,-123,567,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,200,material inflows,-123,586,49,11,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,201,current stock of material,235,458,50,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,202,initial stock of material,270,930,44,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,203,mass balance material,306,702,43,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,204,189,203,1,0,0,0,0,128,0,-1--1--1,,1|(204,594)|
+1,205,201,203,1,0,0,0,0,128,0,-1--1--1,,1|(279,553)|
+1,206,190,203,1,0,0,0,0,128,0,-1--1--1,,1|(237,805)|
+1,207,202,203,1,0,0,0,0,128,0,-1--1--1,,1|(316,844)|
+10,208,disposal of EEE as WEEE,-267,425,65,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,209,208,200,0,0,0,0,0,64,0,-1--1--1,,1|(-197,504)|
+10,210,EEE average unit weight,-501,676,59,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,211,210,200,0,0,0,0,0,64,0,-1--1--1,,1|(-313,631)|
+10,212,extraction,-218,694,41,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,213,212,200,0,0,0,0,0,64,0,-1--1--1,,1|(-176,645)|
+10,214,WEEE not recycled,56,696,40,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,215,214,200,0,0,0,0,0,64,0,-1--1--1,,1|(-35,640)|
+1,216,222,200,0,0,0,0,0,64,0,-1--1--1,,1|(-100,639)|
+1,217,210,195,0,0,0,0,0,64,0,-1--1--1,,1|(-308,763)|
+10,218,EEE commissioning,-337,955,51,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,219,218,195,0,0,0,0,0,64,0,-1--1--1,,1|(-227,900)|
+1,220,212,195,0,0,0,0,0,64,0,-1--1--1,,1|(-173,765)|
+1,221,214,195,0,0,0,0,0,64,0,-1--1--1,,1|(-31,771)|
+10,222,WEEE recycling,-78,689,33,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,223,222,195,0,0,0,0,0,64,0,-1--1--1,,1|(-98,765)|
+10,224,Non recycled WEEE,523,336,48,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,225,224,201,0,0,0,0,0,64,0,-1--1--1,,1|(385,394)|
+10,226,Processed material,226,327,39,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,227,226,201,0,0,0,0,0,64,0,-1--1--1,,1|(229,385)|
+10,228,Raw material,50,325,51,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,229,228,201,0,0,0,0,0,64,0,-1--1--1,,1|(130,383)|
+10,230,WEEE before treatment,381,333,50,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,231,230,201,0,0,0,0,0,64,0,-1--1--1,,1|(313,390)|
+10,232,initial stock of non recycled WEEE,617,1029,62,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,233,232,202,0,0,0,0,0,64,0,-1--1--1,,1|(441,978)|
+10,234,initial stock of processed material,227,1028,65,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,235,234,202,0,0,0,0,0,64,0,-1--1--1,,1|(245,985)|
+10,236,initial stock of raw material,51,1023,63,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,237,236,202,0,0,0,0,0,64,0,-1--1--1,,1|(154,978)|
+10,238,initial stock of WEEE before treatment,405,1030,73,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,239,238,202,0,0,0,0,0,64,0,-1--1--1,,1|(343,984)|
+10,240,leakage of products,1785,-547,33,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,241,leakage of materials,2060,-530,33,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,242,Total products in the system,1795,-425,54,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,243,242,240,1,0,0,0,0,128,0,-1--1--1,,1|(1810,-477)|
+10,244,Total materials in the system,2150,-428,54,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,245,244,241,1,0,0,0,0,128,0,-1--1--1,,1|(2120,-485)|
+1,246,242,244,0,0,0,0,0,64,0,-1--1--1,,1|(1965,-427)|
+10,247,Available used EEE,1711,-338,52,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,248,247,242,0,0,0,0,0,64,0,-1--1--1,,1|(1747,-377)|
+10,249,First use EEE,1594,-409,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,250,249,242,0,0,0,0,0,64,0,-1--1--1,,1|(1686,-417)|
+10,251,Second use EEE,1856,-342,42,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,252,251,242,0,0,0,0,0,64,0,-1--1--1,,1|(1829,-378)|
+10,253,disposal of EEE as WEEE,1646,-600,65,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,254,253,240,0,0,0,0,0,64,0,-1--1--1,,1|(1716,-573)|
+10,255,EEE average unit weight,2198,-345,59,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,256,255,244,0,0,0,0,0,64,0,-1--1--1,,1|(2177,-381)|
+10,257,WEEE before treatment,2037,-341,50,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,258,257,244,0,0,0,0,0,64,0,-1--1--1,,1|(2087,-381)|
+10,259,WEEE not recycled,1937,-594,40,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,260,259,241,0,0,0,0,0,64,0,-1--1--1,,1|(1993,-565)|
+12,261,0,-472,201,387,22,3,135,0,24,-1,0,0,0,-1--1--1,0-0-0,|16|B|0-0-0,0,0,0,0,0,0
+Mass-balance check
+12,262,0,1551,189,162,19,3,135,0,24,-1,0,0,0,-1--1--1,0-0-0,|16|B|0-0-0,0,0,0,0,0,0
+Theil inequality statistics
+12,263,0,611,-836,162,19,3,135,0,24,-1,0,0,0,-1--1--1,0-0-0,|16|B|0-0-0,0,0,0,0,0,0
+Calibration panel
+12,264,0,2210,-869,162,19,3,135,0,24,-1,0,0,0,-1--1--1,0-0-0,|16|B|0-0-0,0,0,0,0,0,0
+Model Indicators
+10,265,max value WEEE recycling,2908,-376,45,26,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,266,WEEE recycling,3143,-329,33,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,267,266,265,1,0,0,0,0,128,0,-1--1--1,,1|(3028,-375)|
+10,268,time max value recycling,2910,-209,47,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,269,265,268,1,0,0,0,0,128,0,-1--1--1,,1|(2894,-307)|
+10,270,Time,3035,-101,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,271,266,268,1,0,0,0,0,128,0,-1--1--1,,1|(3091,-266)|
+1,272,270,268,1,0,0,0,0,128,0,-1--1--1,,1|(2937,-141)|
+10,273,EEE commissioning,2695,-709,51,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,274,second use commissioning,3093,-688,51,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,275,remanufacturing,2684,-280,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,276,max value EEE commissioning,2471,-787,56,26,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,277,max value second use commissioning,2915,-788,69,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,278,max value remanufacturing,2466,-382,50,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,279,time max value commissioning,2471,-655,47,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,280,time max value second use commissioning,2898,-629,72,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,281,time max value remanufacturing,2465,-217,50,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,282,Time,2603,-538,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,283,Time,3047,-507,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,284,Time,2600,-107,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,285,274,277,1,0,0,0,0,128,0,-1--1--1,,1|(3028,-758)|
+1,286,277,280,1,0,0,0,0,128,0,-1--1--1,,1|(2901,-719)|
+1,287,274,280,1,0,0,0,0,128,0,-1--1--1,,1|(3044,-638)|
+1,288,283,280,1,0,0,0,0,128,0,-1--1--1,,1|(2967,-548)|
+1,289,273,276,1,0,0,0,0,128,0,-1--1--1,,1|(2606,-771)|
+1,290,276,279,1,0,0,0,0,128,0,-1--1--1,,1|(2445,-712)|
+1,291,273,279,1,0,0,0,0,128,0,-1--1--1,,1|(2659,-661)|
+1,292,282,279,1,0,0,0,0,128,0,-1--1--1,,1|(2513,-582)|
+1,293,275,278,1,0,0,0,0,128,0,-1--1--1,,1|(2586,-353)|
+1,294,278,281,1,0,0,0,0,128,0,-1--1--1,,1|(2446,-294)|
+1,295,275,281,1,0,0,0,0,128,0,-1--1--1,,1|(2624,-249)|
+1,296,284,281,1,0,0,0,0,128,0,-1--1--1,,1|(2523,-129)|
+10,297,error households adoption,-763,-623,54,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,298,EEE adopters,-753,-522,53,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,299,298,297,0,0,0,0,0,64,0,-1--1--1,,1|(-758,-562)|
+10,300,Potential EEE adopters,-923,-546,49,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,301,300,297,0,0,0,0,0,64,0,-1--1--1,,1|(-850,-582)|
+10,302,total households,-562,-597,60,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,303,302,297,0,0,0,0,0,64,0,-1--1--1,,1|(-659,-610)|
+12,304,0,-761,-808,162,19,3,135,0,24,-1,0,0,0,-1--1--1,0-0-0,|16|B|0-0-0,0,0,0,0,0,0
+Identified errors
+10,305,EEE per household,-828,-112,33,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,306,EEE per inhabitant,-617,-101,58,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,307,Total EEE in use,-730,-182,45,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|0||128-128-128,0,0,0,0,0,0
+1,308,307,305,0,0,0,0,0,64,0,-1--1--1,,1|(-774,-151)|
+10,309,total households,-905,-176,60,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|0||128-128-128,0,0,0,0,0,0
+1,310,309,305,0,0,0,0,0,64,0,-1--1--1,,1|(-877,-153)|
+1,314,307,306,0,0,0,0,0,64,0,-1--1--1,,1|(-675,-142)|
+10,315,population,-514,-184,34,11,8,3,0,4,0,0,0,0,-1--1--1,192-255-255,|12||0-0-0,0,0,0,0,0,0
+1,316,315,306,0,0,0,0,0,128,0,-1--1--1,,1|(-561,-147)|
+12,317,0,-757,-286,162,19,3,135,0,24,-1,0,0,0,-1--1--1,0-0-0,|16|B|0-0-0,0,0,0,0,0,0
+Other verifications
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Depreciation (incomplete)
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,5,2
+10,1,second use price,158,437,53,11,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,2,remanufacturing contribution per unit,243,280,64,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,3,WEEE costs for non recycling,759,152,52,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,4,decomissioned EEE outflows,628,466,64,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,5,ratio WEEE not being recycled from decomissioned EEE,773,247,70,28,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,6,ratio WEEE recycling from decomissioned EEE,539,252,80,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,7,ratio remanufacturing from decommissioned EEE,429,327,86,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,8,ratio second use comissioning from decommissioned EEE,216,649,69,28,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,9,4,5,1,0,0,0,0,64,0,-1--1--1,,1|(724,365)|
+1,10,4,6,1,0,0,0,0,64,0,-1--1--1,,1|(534,327)|
+1,11,4,7,1,0,0,0,0,64,0,-1--1--1,,1|(511,398)|
+1,12,4,8,1,0,0,0,0,64,0,-1--1--1,,1|(342,567)|
+10,13,decommissioned EEE average outflow price,356,100,69,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,14,5,13,1,0,0,0,0,64,0,-1--1--1,,1|(615,126)|
+1,15,3,13,1,0,0,0,0,64,0,-1--1--1,,1|(586,76)|
+1,16,6,13,1,0,0,0,0,64,0,-1--1--1,,1|(414,174)|
+1,17,7,13,1,0,0,0,0,64,0,-1--1--1,,1|(407,195)|
+1,18,8,13,1,0,0,0,0,64,0,-1--1--1,,1|(49,298)|
+1,19,2,13,1,0,0,0,0,64,0,-1--1--1,,1|(261,221)|
+1,20,1,13,1,0,0,0,0,64,0,-1--1--1,,1|(179,166)|
+10,21,EEE depreciation ratio,1289,267,56,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,22,average EEE value,1405,348,59,11,8,3,0,4,0,0,0,0,-1--1--1,192-255-192,|12||0-0-0,0,0,0,0,0,0
+1,23,21,22,1,0,0,0,0,64,0,-1--1--1,,1|(1354,304)|
+10,24,EEE unit price,1151,393,45,11,8,3,0,4,0,0,0,0,-1--1--1,192-255-255,|12||0-0-0,0,0,0,0,0,0
+10,25,ratio of EEE price for second use,182,534,68,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,26,25,1,1,0,0,0,0,128,0,-1--1--1,,1|(137,479)|
+10,27,Total historical first use EEE value,1475,480,55,27,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,28,22,27,1,0,0,0,0,128,0,-1--1--1,,1|(1431,384)|
+10,29,ratio of reman contribution per unit,309,449,64,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,30,29,2,1,0,0,0,0,128,0,-1--1--1,,1|(304,359)|
+10,31,total first use EEE value,1273,470,57,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,32,22,31,1,0,0,0,0,128,0,-1--1--1,,1|(1318,413)|
+1,33,24,21,1,0,0,0,0,128,0,-1--1--1,,1|(1257,356)|
+1,34,24,22,1,0,0,0,0,128,0,-1--1--1,,1|(1275,389)|
+1,35,43,7,0,0,0,0,0,64,0,-1--1--1,,1|(439,391)|
+1,36,50,6,0,0,0,0,0,64,0,-1--1--1,,1|(540,202)|
+10,37,WEEE recycling,619,320,33,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,38,37,6,0,0,0,0,0,64,0,-1--1--1,,1|(584,290)|
+1,39,50,5,0,0,0,0,0,64,0,-1--1--1,,1|(642,201)|
+10,40,WEEE not recycled,827,461,40,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,41,40,5,1,0,0,0,0,64,0,-1--1--1,,1|(843,359)|
+1,42,50,4,1,0,0,0,0,64,0,-1--1--1,,1|(680,283)|
+10,43,remanufacturing,446,434,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,44,43,4,0,0,0,0,0,64,0,-1--1--1,,1|(527,447)|
+10,45,second use commissioning,534,656,51,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,46,45,4,1,0,0,0,0,64,0,-1--1--1,,1|(617,591)|
+1,47,40,4,1,0,0,0,0,64,0,-1--1--1,,1|(749,492)|
+1,48,37,4,0,0,0,0,0,64,0,-1--1--1,,1|(622,386)|
+1,49,45,8,1,0,0,0,0,64,0,-1--1--1,,1|(381,672)|
+10,50,EEE average unit weight,542,167,59,19,8,2,0,7,-1,0,0,0,128-128-128,192-255-255,|12||128-128-128,0,0,0,0,0,0
+1,51,50,13,0,0,0,0,0,64,0,-1--1--1,,1|(455,135)|
+10,52,First use EEE,1336,565,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,53,52,31,1,0,0,0,0,64,0,-1--1--1,,1|(1280,539)|
+1,54,52,27,1,0,0,0,0,64,0,-1--1--1,,1|(1405,550)|
+10,55,EEE unit price,222,363,54,11,8,2,0,7,-1,0,0,0,128-128-128,192-255-255,|12||128-128-128,0,0,0,0,0,0
+1,56,55,1,1,0,0,0,0,128,0,-1--1--1,,1|(209,405)|
+1,57,55,2,1,0,0,0,0,128,0,-1--1--1,,1|(227,295)|
+10,58,average EEE age,1480,263,46,19,8,2,0,3,-1,0,0,0,128-128-128,192-255-192,|12||128-128-128,0,0,0,0,0,0
+1,59,58,22,0,0,0,0,0,64,0,-1--1--1,,1|(1443,304)|
+1,60,58,21,0,0,0,0,0,64,0,-1--1--1,,1|(1396,263)|
+10,61,WEEE average market value,335,231,54,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,62,61,13,0,0,0,0,0,64,0,-1--1--1,,1|(343,172)|
+1,63,13,21,1,0,0,0,0,128,0,-1--1--1,,1|(842,-5)|
+///---\\\
+:GRAPH EEE_commissioning_fit
+:TITLE EEE commissioning fit
+:SCALE
+:VAR historic EEE put on market
+:SCALE
+:VAR EEE commissioning
+
+:GRAPH EEE_disposal_fit
+:TITLE EEE disposal fit
+:SCALE
+:VAR historic disposal of EEE
+:Y-MIN 0
+:Y-MAX 1.1e+06
+:SCALE
+:VAR disposal of EEE as WEEE
+:Y-MIN 0
+:Y-MAX 1.1e+06
+
+:GRAPH EEE_in_use_fit
+:TITLE EEE_in_use_fit
+:SCALE
+:VAR R EEE in use
+:Y-MIN 0
+:Y-MAX 1e+07
+:SCALE
+:VAR Total EEE in use
+:Y-MIN 0
+:Y-MAX 1e+07
+:SCALE
+:VAR Available used EEE
+:Y-MIN 0
+:Y-MAX 1e+07
+
+:GRAPH EEE_demand_fit_error
+:TITLE EEE_demand_fit_error
+:X-MIN 1980
+:X-MAX 2050
+:SCALE
+:VAR Available used EEE
+:Y-MIN -150000
+:Y-MAX 600000
+:SCALE
+:VAR EEE in use error
+:Y-MIN -150000
+:Y-MAX 600000
+
+:GRAPH EEE_WEEE_flows
+:TITLE EEE_WEEE_flows
+:SCALE
+:VAR extraction
+:Y-MIN 0
+:Y-MAX 4e+07
+:SCALE
+:VAR EEE commissioning
+:Y-MIN 0
+:Y-MAX 2e+06
+:LINE-WIDTH 2
+:SCALE
+:VAR second use commissioning
+:Y-MIN 0
+:Y-MAX 2e+06
+:LINE-WIDTH 2
+:SCALE
+:VAR remanufacturing
+:Y-MIN 0
+:Y-MAX 2e+06
+:LINE-WIDTH 2
+:SCALE
+:VAR WEEE recycling
+:Y-MIN 0
+:Y-MAX 4e+07
+:SCALE
+:VAR WEEE not recycled
+:Y-MIN 0
+:Y-MAX 4e+07
+
+:TABLE Max_values
+:TITLE Max values
+:PRETTYNUM
+:X-MIN 2050
+:X-MAX 2050
+:FIRST-CELLWIDTH 30
+:CELLWIDTH 14
+:FONT Times New Roman|12||0-0-0
+:VAR max value EEE commissioning
+:VAR time max value commissioning
+:VAR max value second use commissioning
+:VAR time max value second use commissioning
+:VAR max value remanufacturing
+:VAR time max value remanufacturing
+:VAR max value WEEE recycling
+:VAR time max value recycling
+:L<%^E!@
+1:aaa.vdfx
+1:NL408 _RM4.vdfx
+1:NL408 _0,75life.vdfx
+1:NL408 _RC4.vdfx
+1:NL408 _1,5life.vdfx
+1:NL408 _zero.vdfx
+1:NL408 _SU4.vdfx
+9:aaa
+13:prerun_NL408.vdfx
+23:0
+18:ewastev10.3 prospectivea.vsc
+20:ewastev10.3 prospectivea.lst
+15:0,0,0,1,0,0
+19:5,5
+27:0,
+34:0,
+4:Time
+5:Y
+35:Date
+36:YYYY-MM-DD
+37:1980
+38:1
+39:1
+40:0
+41:0
+42:0
+72:0
+73:0
+76:0
+77:0
+78:0
+79:0
+80:0
+81:0
+24:1980
+25:2050
+26:2050
+57:1
+54:0
+55:0
+59:0
+56:1
+58:0
+71:0
+44:65001
+46:0
+45:0
+49:0
+50:0
+51:
+52:
+53:
+43:POMWEEE_108_NL
+47:POMWEEE_108_NL
+48:
+75:
+43:POMWEEE_108_NL
