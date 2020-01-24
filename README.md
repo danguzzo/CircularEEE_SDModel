@@ -47,11 +47,28 @@ Class|Variable|Range|Source
 **Model calibration**
 
 Now, in the retrospective model, one should import the dataset created. 
+
 The 'potential adoption fraction' must be calibrated by using the variables (a) 'normalised ratio EEE price per PPP' and (b) 'R EEE per household'. The pairs of values to be inserted into 'potential adoption fraction' are constituted by [ai, bi]. 
+
 You are trying to make 'adoption purchases' mimic the first peak of 'R EEE commissioning'. 
 When the values for 'potential adoption fraction' were obtained, output dataset from the retrospective model is used on the prospective  model.
+
 After running the prospective using the output dataset, one may verify the fit among the curves of 'historic EEE put on market' (dataset input), 'R EEE in use' (retrospective model output), and 'historic disposal of EEE' (dataset input) to the calculated values of 'EEE commissioning', 'Total EEE in use' and 'disposal of EEE as WEEE'. The graphs are already available in the view '5. Calibration and tests'.
+
 One may also the Theil's inequality statistics structure available in the same view to verify the sources of errros among simulated and imported time series: bias (Um), unequal variation (Us), and unequal covariation (Uc).
+
+**Model use**
+
+At this point, one can try some combinations of CE mechanisms to verify the flow of resources.
+The following variables may influence the implementation of Circular Economy mechanisms in the model:
+- lifetime ratio
+- second use infrastructure level
+- repairing infrastructure level
+- remanufacturing infrastructure level
+- recycling infrastructure level
+
+In a Circular Economy, organisations and institutions aim to decrease the inflow of materials and products in the system while keeping them in high use. 
+Thus, we recommend you to check how the changes in CE mechanisms influence the stocks and flows of EEE and WEEE in the system. 
 
 **References**
 
