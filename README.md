@@ -44,6 +44,7 @@ Class|Variable|Range|Source
 |Country_EEE-specific|initial adoption fraction|1980|de Almeida and Rosenfeld (1987, p. 80)
 
 **References**
+
 de Almeida, A., & Rosenfeld, A. H. (1987). Demand-Side Management and Electricity End-Use Efficiency (Vol. 149; A. T. Almeida & A. H. Rosenfeld, Eds.). https://doi.org/10.1620/tjem.162.269
 Forti, V., Baldé, C. P., & Kuehr, R. (2018). E-Waste Statistics.
 International Monetary Fund. (2019). World Economic Outlook. Retrieved from https://www.imf.org/external/datamapper/datasets/WEO
