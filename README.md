@@ -3,7 +3,7 @@ The Circular EEE SD model was created with the following purpose: to represent r
 
 The model was developed using Vensim® DSS for Windows Version 8.0.7 Double Precision x64.
 
-**Data and model structure**
+## Data and model structure
 
 The figure below details the structure for data acquisition and model use.
 
@@ -29,7 +29,7 @@ In this document one can access an overview of model information, all the model 
 
 The model has been extensively tested using data for the Flat Panel Television (UNU 408) in the Netherlands (NL). The dataset assembled is available in the /datasets/ folder in the data_NL408.xlsx file.
 
-**Data gathering**
+## Data gathering
 
 First, one may choose a specific country and EEE.
 
@@ -50,7 +50,7 @@ Class|Variable|Range|Source
 |Country_EEE-specific|historic disposal of EEE|1980-2020|van Straalen et al (2016)
 |Country_EEE-specific|initial adoption fraction|1980|de Almeida and Rosenfeld (1987, p. 80)
 
-**Model calibration**
+## Model calibration
 
 Now, in the retrospective model, one should import the dataset created. 
 
@@ -65,7 +65,7 @@ One may also the Theil's inequality statistics structure available in the same v
 
 If the curves are adequately calibrated, one may start model use.
 
-**Model use**
+## Model use
 
 At this point, one can try some combinations of CE mechanisms to verify the flow of resources.
 
@@ -79,7 +79,7 @@ The following variables may influence the implementation of Circular Economy mec
 In a Circular Economy, organisations and institutions aim to decrease the inflow of materials and products in the system while keeping them in high use. 
 Thus, we recommend you to check how the changes in CE mechanisms influence the stocks and flows of EEE and WEEE in the system. 
 
-**References**
+## References
 
 de Almeida, A., & Rosenfeld, A. H. (1987). Demand-Side Management and Electricity End-Use Efficiency (Vol. 149; A. T. Almeida & A. H. Rosenfeld, Eds.). https://doi.org/10.1620/tjem.162.269
 
