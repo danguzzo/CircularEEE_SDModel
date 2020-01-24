@@ -24,10 +24,11 @@ In this document one can access an overview of model information, all the model 
 
 The model has been extensively tested using data for the Flat Panel Television (UNU 408) in the Netherlands (NL). The dataset assembled is available in the /datasets/ folder in the data_NL408.xlsx file.
 
-**Calibrating the model**
-In order to calibrate the model for further use, one may choose a specific country and EEE.
+**Data gathering**
+
+First, one may choose a specific country and EEE.
 He/she may obtain the values for the variables mentioned on the 'Data preparation' table for the specified range. 
-Sources are mentioned for the specific case. For other countries and EEE types, further research may be needed.
+Sources are mentioned for the specific case of Flat Panel Television in the Netherlands. For other countries and EEE types, further research may be needed.
 
 Class|Variable|Range|Source
 -----|--------|-----|------
@@ -43,13 +44,29 @@ Class|Variable|Range|Source
 |Country_EEE-specific|historic disposal of EEE|1980-2020|van Straalen et al (2016)
 |Country_EEE-specific|initial adoption fraction|1980|de Almeida and Rosenfeld (1987, p. 80)
 
+**Model calibration**
+
+Now, in the retrospective model, one should import the dataset created. 
+The 'potential adoption fraction' must be calibrated by using the variables (a) 'normalised ratio EEE price per PPP' and (b) 'R EEE per household'. The pairs of values to be inserted into 'potential adoption fraction' are constituted by [ai, bi]. 
+You are trying to make 'adoption purchases' mimic the first peak of 'R EEE commissioning'. 
+When the values for 'potential adoption fraction' were obtained, output dataset from the retrospective model is used on the prospective  model.
+After running the prospective using the output dataset, one may verify the fit among the curves of 'historic EEE put on market' (dataset input), 'R EEE in use' (retrospective model output), and 'historic disposal of EEE' (dataset input) to the calculated values of 'EEE commissioning', 'Total EEE in use' and 'disposal of EEE as WEEE'. The graphs are already available in the view '5. Calibration and tests'.
+One may also the Theil's inequality statistics structure available in the same view to verify the sources of errros among simulated and imported time series: bias (Um), unequal variation (Us), and unequal covariation (Uc).
+
 **References**
 
 de Almeida, A., & Rosenfeld, A. H. (1987). Demand-Side Management and Electricity End-Use Efficiency (Vol. 149; A. T. Almeida & A. H. Rosenfeld, Eds.). https://doi.org/10.1620/tjem.162.269
+
 Forti, V., Baldé, C. P., & Kuehr, R. (2018). E-Waste Statistics.
+
 International Monetary Fund. (2019). World Economic Outlook. Retrieved from https://www.imf.org/external/datamapper/datasets/WEO
+
 Morrison, G. (2017). Are TVs really cheaper than ever? We go back a few decades to see. Retrieved from https://www.cnet.com/news/are-tvs-really-cheaper-than-ever-we-go-back-a-few-decades-to-see/
+
 PricewaterhouseCoopers. (2017). The World in 2050. Retrieved from https://www.pwc.com/gx/en/issues/economy/the-world-in-2050.html
+
 Statistics Netherlands. (n.d.). CBS Open data StatLine. Retrieved from https://opendata.cbs.nl/statline/portal.html?_la=en&_catalog=CBS
+
 van Straalen, V. M., Roskam, A. J., & Baldé, C. P. (2016). Waste over Time. Retrieved from https://github.com/Statistics-Netherlands/ewast
+
 Zeng, X., & Li, J. (2016). Measuring the recyclability of e-waste: An innovative method and its implications. Journal of Cleaner Production, 131, 156–162. https://doi.org/10.1016/j.jclepro.2016.05.055
