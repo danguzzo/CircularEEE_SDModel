@@ -3,30 +3,36 @@ The Circular EEE SD model was created with the following purpose: to represent r
 
 The model was developed using Vensim® DSS for Windows Version 8.0.7 Double Precision x64.
 
-The data and models structure utilised are detailed below:
+** Data and model structure **
+
+The figure below details the structure for data acquisition and model use.
 
 ![Data and models structure](https://github.com/danguzzo/cirularEEE_SDmodel/blob/master/images/circularEEE_v.1structure.jpg)
 
-The model is composed of two complementary portions: *circularEE_v.1retrospective* and *circularEEE_v.1prospective*. 
-The retrospective model makes use of a dataset containing country and EEE specific time series. 
-Following, the output of the retrospective model is used to calibrate the prospective model. 
+The model is composed of two complementary portions: *circularEE_v.1retrospective* and *circularEEE_v.1prospective*.
+
+The **retrospective model** makes use of a dataset containing country and EEE specific time series. 
+
+Following, the output of the **retrospective model** is used to calibrate the **prospective model**. 
+
 Finally, different scenarios of Circular Economy strategies implementation can be verified.
 
-Both models are available in the /models/ folder on the original version developd (.mdl) and on a Vensim Model Reader compatible format (.vpmx).
-A colour scheme have developed to identify the data and models structures in models' variables:
+Both models are available in the /models/ folder in the original version developed (.mdl) and in a Vensim Model Reader compatible format (.vpmx).
+A colour scheme identifies specific input and output variables to facilitate undertanding and use:
 - ![#c0ffff](https://placehold.it/15/c0ffff/000000?text=+) blue: dataset input
 - ![#ff80c0](https://placehold.it/15/ff80c0/000000?text=+) pink: retrospective model output
 - ![#c0ffc0](https://placehold.it/15/c0ffc0/000000?text=+) green: prospective submodel output
 - ![#c080c0](https://placehold.it/15/c080c0/000000?text=+) purple: input variables to test CE mechanisms
 
 Reports for both models using the [SDM-Doc](https://www.systemdynamics.org/SDM-doc) documentation tool are available on the /models/docreports/ folder. 
-In this document one can access an overview of model information, all the model views -- which constitute the structure of key submodels --, and a detailed description of each variable used in the model. Unit warnings are detailed using the '†' character.
+In this document one can access an overview of model information, all the model views – which constitute the structure of key submodels –, and a detailed description of each variable used in the model. Unit warnings are detailed using the '†' character.
 
 The model has been extensively tested using data for the Flat Panel Television (UNU 408) in the Netherlands (NL). The dataset assembled is available in the /datasets/ folder in the data_NL408.xlsx file.
 
 **Data gathering**
 
 First, one may choose a specific country and EEE.
+
 He/she may obtain the values for the variables mentioned on the 'Data preparation' table for the specified range. 
 Sources are mentioned for the specific case of Flat Panel Television in the Netherlands. For other countries and EEE types, further research may be needed.
 
@@ -51,15 +57,18 @@ Now, in the retrospective model, one should import the dataset created.
 The 'potential adoption fraction' must be calibrated by using the variables (a) 'normalised ratio EEE price per PPP' and (b) 'R EEE per household'. The pairs of values to be inserted into 'potential adoption fraction' are constituted by [ai, bi]. 
 
 You are trying to make 'adoption purchases' mimic the first peak of 'R EEE commissioning'. 
-When the values for 'potential adoption fraction' were obtained, output dataset from the retrospective model is used on the prospective  model.
+Once the values for 'potential adoption fraction' are obtained, the output dataset from the retrospective model is used to run the prospective  model.
 
-After running the prospective using the output dataset, one may verify the fit among the curves of 'historic EEE put on market' (dataset input), 'R EEE in use' (retrospective model output), and 'historic disposal of EEE' (dataset input) to the calculated values of 'EEE commissioning', 'Total EEE in use' and 'disposal of EEE as WEEE'. The graphs are already available in the view '5. Calibration and tests'.
+After that, one may verify the fit among the curves of 'historic EEE put on market' (dataset input), 'R EEE in use' (retrospective model output), and 'historic disposal of EEE' (dataset input) to the calculated values of 'EEE commissioning', 'Total EEE in use' and 'disposal of EEE as WEEE'. The graphs are already available in the view '5. Calibration and tests'.
 
 One may also the Theil's inequality statistics structure available in the same view to verify the sources of errros among simulated and imported time series: bias (Um), unequal variation (Us), and unequal covariation (Uc).
+
+If the curves are adequately calibrated, one may start model use.
 
 **Model use**
 
 At this point, one can try some combinations of CE mechanisms to verify the flow of resources.
+
 The following variables may influence the implementation of Circular Economy mechanisms in the model:
 - lifetime ratio
 - second use infrastructure level
