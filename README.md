@@ -3,7 +3,7 @@ The Circular EEE SD model was created with the following purpose: to represent r
 
 The model was developed using Vensim® DSS for Windows Version 8.0.7 Double Precision x64.
 
-** Data and model structure **
+**Data and model structure**
 
 The figure below details the structure for data acquisition and model use.
 
