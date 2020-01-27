@@ -1,10 +1,15 @@
-- [ ] upload NL408_input.vdfx
-- [ ] upload NL408_prerun.vdfx
-- [ ] upload SDM-doc reports
 - [ ] present a table for CE mechanisms variables and some results?
 
 # cirularEEE_SDmodel
 The Circular EEE SD model was created with the following purpose: to represent region-wide long-term dynamics of stocks and flows of EEEs when introducing specific scenarios for Circular Economy strategies implementation.
+
+The model was conceptualised following a dynamic Material Flow Analysis approach. It makes use of public available data of inflows and outflows of EEE products in specific countries to determine the stocks through time.
+
+Among the critical endogenous submodels are:
+- A submodel for technology adoption following the Bass diffusion model that determines the EEE demand from adoption
+- A submodel for the obsolescence of EEE through a co-flow structure that determines EEE average age in combination to the probability of obsolescence using the Weibull lifetime distribution
+- A submodel for the paths of EEE and WEEE in given region comprising first use, second use, remanufacturing, recycling, and disposal connected to mechanisms to verify Circular Economy implementation
+- A submodel for the extraction of material following a supply chain structure
 
 The model was developed using Vensim® DSS for Windows Version 8.0.7 Double Precision x64.
 
@@ -29,7 +34,7 @@ A colour scheme identifies specific input and output variables to facilitate und
 - ![#c0ffc0](https://placehold.it/15/c0ffc0/000000?text=+) green: prospective submodel output
 - ![#c080c0](https://placehold.it/15/c080c0/000000?text=+) purple: input variables to test CE mechanisms
 
-Reports for both models using the [SDM-Doc](https://www.systemdynamics.org/SDM-doc) documentation tool are available on the /models/docreports/ folder. 
+Reports for both models using the [SDM-Doc](https://www.systemdynamics.org/SDM-doc) documentation tool are available on the /models/reports/ folder. 
 In this document one can access an overview of model information, all the model views – which constitute the structure of key submodels –, and a detailed description of each variable used in the model. Unit warnings are detailed using the '†' character.
 
 The model has been extensively tested using data for the Flat Panel Television (UNU 408) in the Netherlands (NL). The dataset assembled is available in the /datasets/ folder in the data_NL408.xlsx file.
@@ -98,6 +103,6 @@ PricewaterhouseCoopers. (2017). The World in 2050. Retrieved from https://www.pw
 
 Statistics Netherlands. (n.d.). CBS Open data StatLine. Retrieved from https://opendata.cbs.nl/statline/portal.html?_la=en&_catalog=CBS
 
-van Straalen, V. M., Roskam, A. J., & Baldé, C. P. (2016). Waste over Time. Retrieved from https://github.com/Statistics-Netherlands/ewast
+van Straalen, V. M., Roskam, A. J., & Baldé, C. P. (2016). Waste over Time. Retrieved from https://github.com/Statistics-Netherlands/ewaste
 
 Zeng, X., & Li, J. (2016). Measuring the recyclability of e-waste: An innovative method and its implications. Journal of Cleaner Production, 131, 156–162. https://doi.org/10.1016/j.jclepro.2016.05.055
