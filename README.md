@@ -6,10 +6,10 @@ The Circular EEE SD model was created with the following purpose: to represent r
 The model was conceptualised following a dynamic Material Flow Analysis approach. It makes use of public available data of inflows and outflows of EEE products in specific countries to determine the stocks through time.
 
 Among the critical endogenous submodels are:
-- A submodel for technology adoption following the Bass diffusion model that determines the EEE demand from adoption
-- A submodel for the obsolescence of EEE through a co-flow structure that determines EEE average age in combination to the probability of obsolescence using the Weibull lifetime distribution
-- A submodel for the paths of EEE and WEEE in given region comprising first use, second use, remanufacturing, recycling, and disposal connected to mechanisms to verify Circular Economy implementation
-- A submodel for the extraction of material following a supply chain structure
+- A submodel for **technology adoption** following the Bass diffusion model that determines the EEE demand from adoption
+- A submodel for the **obsolescence of EEE** through a co-flow structure that determines EEE average age in combination to the probability of obsolescence using the Weibull lifetime distribution
+- A submodel for the **paths of EEE and WEEE** in given region comprising first use, second use, remanufacturing, recycling, and disposal connected to mechanisms to verify Circular Economy implementation
+- A submodel for the **extraction of material** following a supply chain structure
 
 The model was developed using Vensim® DSS for Windows Version 8.0.7 Double Precision x64.
 
@@ -37,7 +37,7 @@ A colour scheme identifies specific input and output variables to facilitate und
 Reports for both models using the [SDM-Doc](https://www.systemdynamics.org/SDM-doc) documentation tool are available on the /models/reports/ folder. 
 In this document one can access an overview of model information, all the model views – which constitute the structure of key submodels –, and a detailed description of each variable used in the model. Unit warnings are detailed using the '†' character.
 
-The model has been extensively tested using data for the Flat Panel Television (UNU 408) in the Netherlands (NL). The dataset assembled is available in the /datasets/ folder in the data_NL408.xlsx file.
+The model has been extensively tested using data for the **Flat Panel Television (UNU 408)** in the **Netherlands (NL)**. The dataset assembled is available in the /datasets/ folder in the data_NL408.xlsx file.
 
 ## Data gathering
 
@@ -62,12 +62,12 @@ Class|Variable|Range|Source
 
 ## Model calibration
 
-Now, in the retrospective model, one should import the dataset created. 
+Now, in the retrospective model, one should import the dataset created. The file obtained from importing the data into the model is available in the datasets folder: input_NL408.vdfx. 
 
 The 'potential adoption fraction' must be calibrated by using the variables (a) 'normalised ratio EEE price per PPP' and (b) 'R EEE per household'. The pairs of values to be inserted into 'potential adoption fraction' are constituted by [ai, bi]. 
 
 You are trying to make 'adoption purchases' mimic the first peak of 'R EEE commissioning'. 
-Once the values for 'potential adoption fraction' are obtained, the output dataset from the retrospective model is used to run the prospective  model.
+Once the values for 'potential adoption fraction' are obtained, the output dataset from the retrospective model is used to run the prospective  model. The file obtained from the calibration of the retrospective model is available in the datasets folder: prerun_NL408.vdfx. 
 
 After that, one may verify the fit among the curves of 'historic EEE put on market' (dataset input), 'R EEE in use' (retrospective model output), and 'historic disposal of EEE' (dataset input) to the calculated values of 'EEE commissioning', 'Total EEE in use' and 'disposal of EEE as WEEE'. The graphs are already available in the view '5. Calibration and tests'.
 
