@@ -91,11 +91,33 @@ Thus, we recommend you to check how the changes in CE mechanisms influence the s
 
 ## Model testing activities and limitations
 
-Below we outline the testing activities performed in the model. Learning outcomes and model changes are described for each activity. Transparency in testing activities and learning outcomes help determine the suitability of the model for the defined purpose.
+The table below outlines the testing activities performed in the model. Learning outcomes and model changes are described for each activity. Transparency in testing activities and learning outcomes help determine the suitability of the model for the defined purpose.
 
 Test type|Test description|Learning outcomes and model changes
 ---------|----------------|-----------------------------------
-Boundary adequacy	| Model boundary chart development	| Model boundaries defined. Relevant structures have been endogenized. Reliable data for most of the exogenous structures can be obtained from structured databases. 
+Boundary adequacy	| Model boundary chart development | Model boundaries defined. Relevant structures have been endogenized. Reliable data for most of the exogenous structures can be obtained from structured databases.
+Boundary adequacy	| Model expansion to include the Adoption submodel | Stabilises the transition from retrospective to prospective simulation. Enables verification of resource usage in the face of adoption of a technology.
+Structure assessment | Subsystem diagram development | Represents the main concepts and feedback structures used to address the model purpose.
+Structure assessment | Model conceptualisation following dynamic Material Flow Analysis concept	| Such an approach relies on the conservation of matter principle. Non-recycled WEEE stock is the sink of the system.
+Structure assessment | Application of the mass-balance check (Dangerfield, 2014) for products and materials |	Permits verification that the model does not gain or lose mass of materials and products.
+Structure assessment | Development and testing relevant sub-model parts in isolation to build confidence before aggregate analysis | Every EEE and WEEE flow has been developed and tested isolated from changes in other parts until a plausible behaviour was obtained. 
+Structure assessment | Verification of stocks in varied conditions to identify negative values | Leadst to changing model structure or equations. For instance, the 'Available used-EEE' stock had to be constrained. The following assumption was implemented: these products will rather move into second use, then remanufacturing, then recycling. In that order of preference.
+Dimensional adequacy | Use of parameters with real-world meaning when modelling | Every parameter receives a name and description that clearly identifies its meaning. One clear ad hoc variable is 'effect of PPP on the average number of EEE per household', that helps to calculate EEE demand from recurrent purchases of adopters based on historical data.
+Parameter assessment | Elaboration of a step-by-step guide to calibrating relevant partial models | Enables to calibrate the behaviour of EEE adoption from retrospective data available from 1980-2015.
+Extreme conditions | Bounding the use of the model by levels of CE mechanisms implementation | The 0 to 4 infrastructure level indexes bound the model. It decreases the potential of unexpected behaviour due to extreme conditions. In the other hand, it may decrease the possibilities for insights.
+Extreme conditions | Bounding auxiliaries and flows with potential extreme behaviour | For instance, a combination of MIN and one-minus function was used to prevent the 'fraction of decommissioned EEE introduced to E-waste market' to be negative.
+Extreme conditions | Shocks and extreme condition testing	| For instance, tested the inflow of a shipment of used products as 'Available used-EEE' with a given average age in the middle of the adoption process, mimicking what happens in countries under development. Mass balance is maintained, EEE and WEEE flows provide insights.
+Integration error	| Testing the model using RG4 of 1 year to 0.125-year time steps | Results are not sensitive to these choices in the time step. Nevertheless, the supply chain delays are proportional to the time step.
+Behaviour Reproduction | Setting up a dashboard to fit the prospective model to external data and data calculated in the prospective model | Helps to calibrate the model through behaviour reproduction of the following variables: 'EEE commissioning' and 'historic annual EEE put on market'; ‘Total EEE in use' and 'R EEE in use'; ‘disposal of EEE as WEEE’ and ‘historic disposal of EEE’
+Behaviour Reproduction | Application of descriptive statistics tools to calibrate the model – Theil inequality statistics |	A structure to verify bias, unequal variation, and unequal covariation of simulated and input variables can be used to verify the fit among variables above. Holds potential to automate steps of the calibration process.
+Family member test | Using Netherlands (NL) and Estonia (EST) data for Fridges (UNU 108) | NL and EST provide good sources for data. EST data is harder to obtain when closer to 1980 - former USSR state. The prospective model can be calibrated using the retrospective data available for both cases. Apart from the fact that NL and EST are from different stratum in vanStraalen2016 analysis, they are both mature markets for fridges. This way, comparing the representation of EEE dynamics under CE strategies for both regions does not bring many different insights.
+Family member test | Using (Netherlands) NL data for Fridges (UNU 108) and Flat Display Panel TVs (UNU408) | The prospective model can be calibrated using the retrospective data available for both cases (108NL and 408NL). It enables the discussion of the general implementation of CE mechanisms in EEE. As the adoption curve for Flat Display Panel TVs is similar to the adoption of a technology that becomes mainstream, it is more useful to visualise CE strategies implementation.
+
+The table below contains the model limitations and learning outcomes from potential tests. These tests are out of scope for this modelling effort, but they indicate future endeavours to enhance cofidence to the model, or reframe the model purpose. Model limitations present an opportunity for other researchers and decision-makers to enhance the Circular EEE SD model.
+
+Test type|Test description|Learning outcomes and model changes
+---------|----------------|-----------------------------------
+
 
 ## References
 
