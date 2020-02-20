@@ -1,3 +1,5 @@
+- [ ] Update retrospective model and sdmdoc
+
 # cirularEEE_SDmodel
 The Circular EEE SD model was created with the following purpose: to represent region-wide long-term dynamics of stocks and flows of EEEs when introducing specific scenarios for Circular Economy strategies implementation.
 
