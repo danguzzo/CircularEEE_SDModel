@@ -73,6 +73,8 @@ One may also the Theil's inequality statistics structure available in the same v
 
 If the curves are adequately calibrated, one may start model use.
 
+- [ ] Add images for model calibration
+
 ## Model use
 
 At this point, one can try some combinations of CE mechanisms to verify the flow of resources.
@@ -112,6 +114,8 @@ Behaviour Reproduction | Setting up a dashboard to fit the prospective model to 
 Behaviour Reproduction | Application of descriptive statistics tools to calibrate the model – Theil inequality statistics |	A structure to verify bias, unequal variation, and unequal covariation of simulated and input variables can be used to verify the fit among variables above. Holds potential to automate steps of the calibration process.
 Family member test | Using Netherlands (NL) and Estonia (EST) data for Fridges (UNU 108) | NL and EST provide good sources for data. EST data is harder to obtain when closer to 1980 - former USSR state. The prospective model can be calibrated using the retrospective data available for both cases. Apart from the fact that NL and EST are from different stratum in vanStraalen2016 analysis, they are both mature markets for fridges. This way, comparing the representation of EEE dynamics under CE strategies for both regions does not bring many different insights.
 Family member test | Using (Netherlands) NL data for Fridges (UNU 108) and Flat Display Panel TVs (UNU408) | The prospective model can be calibrated using the retrospective data available for both cases (108NL and 408NL). It enables the discussion of the general implementation of CE mechanisms in EEE. As the adoption curve for Flat Display Panel TVs is similar to the adoption of a technology that becomes mainstream, it is more useful to visualise CE strategies implementation.
+
+- [ ] add references for model testing
 
 ## Model limitations
 
