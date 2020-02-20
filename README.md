@@ -21,7 +21,7 @@ The model is composed of two complementary portions: *circularEE_v.1retrospectiv
 
 The **retrospective model** makes use of a dataset containing country and EEE specific time series. 
 
-Following, the output of the **retrospective model** is used to calibrate the **prospective model**. 
+Following, the output of the **retrospective model** is used to calibrate the **prospective model**. Model calibration happens for three reasons: (1) enable the simulation to range from 1980 to 2050 with continuous behaviour, (2) adjust the behaviour of the adoption sub-model to the historic flow of EEE into a region, (3) fine-tune the behaviour of stocks and flows of EEE considering an initial structure in place. 
 
 Finally, different scenarios of Circular Economy strategies implementation can be verified.
 
@@ -62,7 +62,7 @@ Class|Variable|Range|Source
 
 Now, in the retrospective model, one should import the dataset created. The file obtained from importing the data into the model is available in the datasets folder: input_NL408.vdfx. 
 
-The 'potential adoption fraction' must be calibrated by using the variables (a) 'normalised ratio EEE price per PPP' and (b) 'R EEE per household'. The pairs of values to be inserted into 'potential adoption fraction' are constituted by [ai, bi]. 
+The 'potential adoption fraction' must be calibrated by using the variables (a) 'normalised ratio EEE price per PPP' and (b) 'R EEE per household'. The pairs of values to be inserted into 'potential adoption fraction' are constituted by [ai, bi]. This relation means that a certain adoption level is obtained considering the price of the good and the purchasing power of that population. When the price lowers and purchasing power is high enough, a certain percentage of the population will access that technology.
 
 You are trying to make 'adoption purchases' mimic the first peak of 'R EEE commissioning'. 
 Once the values for 'potential adoption fraction' are obtained, the output dataset from the retrospective model is used to run the prospective  model. The file obtained from the calibration of the retrospective model is available in the datasets folder: prerun_NL408.vdfx. 
@@ -77,7 +77,7 @@ If the curves are adequately calibrated, one may start model use.
 
 At this point, one can try some combinations of CE mechanisms to verify the flow of resources.
 
-The following variables may influence the implementation of Circular Economy mechanisms in the model:
+The following variables influence the implementation of Circular Economy mechanisms in the model:
 - lifetime ratio
 - second use infrastructure level
 - repairing infrastructure level
@@ -89,12 +89,12 @@ Thus, we recommend you to check how the changes in CE mechanisms influence the s
 
 - [ ] present a table for CE mechanisms variables and some results?
 
-## Model testing activities and limitations
+## Model testing activities
 
 The table below outlines the testing activities performed in the model. Learning outcomes and model changes are described for each activity. Transparency in testing activities and learning outcomes help determine the suitability of the model for the defined purpose.
 
 Test type|Test description|Learning outcomes and model changes
----------|----------------|-----------------------------------
+---------|---------------------|-----------------------------------
 Boundary adequacy	| Model boundary chart development | Model boundaries defined. Relevant structures have been endogenized. Reliable data for most of the exogenous structures can be obtained from structured databases.
 Boundary adequacy	| Model expansion to include the Adoption submodel | Stabilises the transition from retrospective to prospective simulation. Enables verification of resource usage in the face of adoption of a technology.
 Structure assessment | Subsystem diagram development | Represents the main concepts and feedback structures used to address the model purpose.
@@ -113,11 +113,17 @@ Behaviour Reproduction | Application of descriptive statistics tools to calibrat
 Family member test | Using Netherlands (NL) and Estonia (EST) data for Fridges (UNU 108) | NL and EST provide good sources for data. EST data is harder to obtain when closer to 1980 - former USSR state. The prospective model can be calibrated using the retrospective data available for both cases. Apart from the fact that NL and EST are from different stratum in vanStraalen2016 analysis, they are both mature markets for fridges. This way, comparing the representation of EEE dynamics under CE strategies for both regions does not bring many different insights.
 Family member test | Using (Netherlands) NL data for Fridges (UNU 108) and Flat Display Panel TVs (UNU408) | The prospective model can be calibrated using the retrospective data available for both cases (108NL and 408NL). It enables the discussion of the general implementation of CE mechanisms in EEE. As the adoption curve for Flat Display Panel TVs is similar to the adoption of a technology that becomes mainstream, it is more useful to visualise CE strategies implementation.
 
+## Model limitations
+
 The table below contains the model limitations and learning outcomes from potential tests. These tests are out of scope for this modelling effort, but they indicate future endeavours to enhance cofidence to the model, or reframe the model purpose. Model limitations present an opportunity for other researchers and decision-makers to enhance the Circular EEE SD model.
 
-Test type|Test description|Learning outcomes and model changes
----------|----------------|-----------------------------------
-
+Limitation|Potential learning outcomes
+----------|---------------------------
+Limited explanatory ability of the adoption mechanism |	Further understanding the types of adoption patterns and their influence in the effects of CE strategies implementation. 
+Limited explanatory ability of the types of purchasing | Further understand how first purchases, recurrent purchases to replace, and additional purchases influence and are influenced by CE strategies implementation. 
+Limited explanatory ability of the types of obsolescence | Increase understanding of the influence of psychological and functional dimensions of obsolesce.
+Limited implementation of non-transaction based CE strategies | Increase understanding of the impacts of sharing and servitization strategies
+Limited explanatory ability of CE mechanisms leverages |	Increase understanding of the incentives for CE mechanisms implementation. 
 
 ## References
 
