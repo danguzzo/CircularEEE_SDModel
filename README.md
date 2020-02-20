@@ -89,6 +89,14 @@ Thus, we recommend you to check how the changes in CE mechanisms influence the s
 
 - [ ] present a table for CE mechanisms variables and some results?
 
+## Model testing activities and limitations
+
+Below we outline the testing activities performed in the model. Learning outcomes and model changes are described for each activity. Transparency in testing activities and learning outcomes help determine the suitability of the model for the defined purpose.
+
+Test type|Test description|Learning outcomes and model changes
+---------|----------------|-----------------------------------
+Boundary adequacy	| Model boundary chart development	| Model boundaries defined. Relevant structures have been endogenized. Reliable data for most of the exogenous structures can be obtained from structured databases. 
+
 ## References
 
 de Almeida, A., & Rosenfeld, A. H. (1987). Demand-Side Management and Electricity End-Use Efficiency (Vol. 149; A. T. Almeida & A. H. Rosenfeld, Eds.). https://doi.org/10.1620/tjem.162.269
