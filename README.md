@@ -1,5 +1,5 @@
-# cirularEEE_SDmodel
-The Circular EEE SD model was created with the following purpose: to represent nation-wide long-term dynamics of stocks and flows of EEEs when introducing specific scenarios for Circular Economy strategies implementation.
+# The Circular EEE SD Model
+The Circular EEE SD Model was created with the following purpose: to represent nation-wide long-term dynamics of stocks and flows of EEEs when introducing specific scenarios for Circular Economy strategies implementation.
 
 This effort followed the iterative process prescribed by Sterman (2000): (i.) Problem articulation, (ii.) Formulation of Dynamic Hypothesis, (iii.) Formulation of a Simulation Model, (iv.) Testing and (v.) Policy Design and Evaluation. The model was conceptualised following a dynamic Material Flow Analysis approach. It makes use of public available data of inflows and outflows of EEE products in countries to determine the stocks through time.
 
@@ -117,7 +117,7 @@ Family member test | Using (Netherlands) NL data for Fridges (UNU 108) and Flat 
 
 ## Model limitations
 
-The table below contains the model limitations and learning outcomes from potential tests. These tests are out of scope for this modelling effort, but they indicate future endeavours to enhance cofidence to the model, or reframe the model purpose. Model limitations present an opportunity for other researchers and decision-makers to enhance the Circular EEE SD model.
+The table below contains the model limitations and learning outcomes from potential tests. These tests are out of scope for this modelling effort, but they indicate future endeavours to enhance cofidence to the model, or reframe the model purpose. Model limitations present an opportunity for other researchers and decision-makers to enhance the Circular EEE SD Model.
 
 Limitation|Potential learning outcomes
 ----------|---------------------------
