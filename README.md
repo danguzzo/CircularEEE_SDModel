@@ -1,14 +1,14 @@
 - [ ] Update retrospective model and sdmdoc
 
 # cirularEEE_SDmodel
-The Circular EEE SD model was created with the following purpose: to represent region-wide long-term dynamics of stocks and flows of EEEs when introducing specific scenarios for Circular Economy strategies implementation.
+The Circular EEE SD model was created with the following purpose: to represent nation-wide long-term dynamics of stocks and flows of EEEs when introducing specific scenarios for Circular Economy strategies implementation.
 
-This effort followed the iterative process prescribed by Sterman (2000): (i.) Problem articulation, (ii.) Formulation of Dynamic Hypothesis, (iii.) Formulation of a Simulation Model, (iv.) Testing and (v.) Policy Design and Evaluation. The model was conceptualised following a dynamic Material Flow Analysis approach. It makes use of public available data of inflows and outflows of EEE products in specific countries to determine the stocks through time.
+This effort followed the iterative process prescribed by Sterman (2000): (i.) Problem articulation, (ii.) Formulation of Dynamic Hypothesis, (iii.) Formulation of a Simulation Model, (iv.) Testing and (v.) Policy Design and Evaluation. The model was conceptualised following a dynamic Material Flow Analysis approach. It makes use of public available data of inflows and outflows of EEE products in countries to determine the stocks through time.
 
 Among the critical endogenous submodels are:
-- A submodel for **technology adoption** following the Bass diffusion model that determines the EEE demand from adoption
-- A submodel for the **obsolescence of EEE** through a co-flow structure that determines EEE average age in combination to the probability of obsolescence using the Weibull lifetime distribution
-- A submodel for the **paths of EEE and WEEE** in given region comprising first use, second use, remanufacturing, recycling, and disposal connected to mechanisms to verify Circular Economy implementation
+- A submodel for **technology adoption** following the Bass diffusion model determines the EEE demand from adoption
+- A submodel for the **obsolescence of EEE** through a co-flow structure determines EEE average age in combination to the probability of obsolescence using the Weibull lifetime distribution
+- A submodel for the **paths of EEE and WEEE** in a given region comprising first use, second use, remanufacturing, recycling, and disposal connected to mechanisms to verify Circular Economy implementation
 - A submodel for the **extraction of material** following a supply chain structure
 
 The model was developed using Vensim® DSS for Windows Version 8.0.7 Double Precision x64.
