@@ -90,7 +90,7 @@ The following variables influence the implementation of Circular Economy mechani
 - remanufacturing infrastructure level
 - recycling infrastructure level
 
-In a Circular Economy, organisations and institutions aim to decrease the inflow of materials and products in the system while keeping them in high use. 
+Towards a Circular Economy, organisations and governments aim to decrease the inflow of materials and products in the system while keeping them in high use. 
 Thus, we recommend you to check how the changes in CE mechanisms influence the stocks and flows of EEE and WEEE in the system.
 
 ## Model testing activities
