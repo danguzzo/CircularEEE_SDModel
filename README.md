@@ -1,15 +1,15 @@
 # The Circular EEE SD Model
-The Circular EEE SD Model was created with the following purpose: to represent nation-wide long-term dynamics of stocks and flows of EEEs when introducing specific scenarios for Circular Economy strategies implementation.
+The Circular EEE SD Model was created to meet the following purpose: to represent long-term nationwide dynamics of EEE stocks and flows when introducing specific scenarios for Circular Economy strategies implementation.
 
-This effort followed the iterative process prescribed by Sterman (2000): (i.) Problem articulation, (ii.) Formulation of Dynamic Hypothesis, (iii.) Formulation of a Simulation Model, (iv.) Testing and (v.) Policy Design and Evaluation. The model was conceptualised following a dynamic Material Flow Analysis approach. It makes use of public available data of inflows and outflows of EEE products in countries to determine the stocks through time.
+The simulation model development followed the iterative process prescribed by Sterman (2000): (i.) Problem articulation, (ii.) Formulation of Dynamic Hypothesis, (iii.) Formulation of a Simulation Model, (iv.) Testing and (v.) Policy Design and Evaluation. The model was conceptualised following a dynamic Material Flow Analysis approach. It makes use of publicly available data of inflows and outflows of EEE products in countries to determine the stocks through time.
 
-Among the critical endogenous submodels are:
-- A submodel for **technology adoption** following the Bass diffusion model determines the EEE demand from adoption
-- A submodel for the **obsolescence of EEE** through a co-flow structure determines EEE average age in combination to the probability of obsolescence using the Weibull lifetime distribution
-- A submodel for the **paths of EEE and WEEE** in a given region comprising first use, second use, remanufacturing, recycling, and disposal connected to mechanisms to verify Circular Economy implementation
-- A submodel for the **extraction of material** following a supply chain structure
+Among the critical endogenous sub-models are:
+- A sub-model for **technology adoption** following a diffusion of innovation (DoI) structure that determines the EEE demand from adoption, replacing and additional purchases
+- A sub-model for the **obsolescence of EEE** determining EEE average age through a co-flow structure in combination to the probability of obsolescence using the Weibull lifetime distribution
+- A sub-model for the **EEE and WEEE flows** resulting from first-use, second-use, remanufacturing, recycling, and disposal connected to mechanisms to verify Circular Economy implementation
+- A sub-model for the **material supply** determining the need for the extraction of material following a stock management structure
 
-The model was developed using Vensim® DSS for Windows Version 8.0.7 Double Precision x64.
+Vensim® DSS for Windows Version 8.0.7 Double Precision x64 was employed to develop the simulation model.
 
 ## Data and model structure
 
@@ -21,28 +21,30 @@ The model is composed of two complementary portions: *circularEE_v.1retrospectiv
 
 The **retrospective model** makes use of a dataset containing country and EEE specific time series. 
 
-Following, the output of the **retrospective model** is used to calibrate the **prospective model**. Model calibration happens for three reasons: (1) enable the simulation to range from 1980 to 2050 with continuous behaviour, (2) adjust the behaviour of the adoption sub-model to the historic flow of EEE into a region, (3) fine-tune the behaviour of stocks and flows of EEE considering an initial structure in place. 
+Following, the output of the **retrospective model** is used to calibrate the **prospective model**. Model calibration happens for three reasons: (1) enable the simulation to range from 1980 to 2050 with continuous behaviour, (2) adjust the behaviour of the adoption sub-model to the historical flow of EEE into a region, (3) fine-tune the behaviour of stocks and flows of EEE considering an initial structure in place. 
 
 Finally, different scenarios of Circular Economy strategies implementation can be verified.
 
 Both models are available in the /models/ folder in the original version developed (.mdl) and in a Vensim Model Reader compatible format (.vpmx).
-A colour scheme identifies specific input and output variables to facilitate undertanding and use:
+A colour scheme identifies specific input and output variables to facilitate understanding and use:
 - ![#c0ffff](https://placehold.it/15/c0ffff/000000?text=+) blue: dataset input
 - ![#ff80c0](https://placehold.it/15/ff80c0/000000?text=+) pink: retrospective model output
-- ![#c0ffc0](https://placehold.it/15/c0ffc0/000000?text=+) green: prospective submodel output
+- ![#c0ffc0](https://placehold.it/15/c0ffc0/000000?text=+) green: prospective sub-model output
 - ![#c080c0](https://placehold.it/15/c080c0/000000?text=+) purple: input variables to test CE mechanisms
 
 Reports for both models using the [SDM-Doc](https://www.systemdynamics.org/SDM-doc) (Martinez-Moyano, 2012) documentation tool are available on the /models/reports/ folder. 
-In this document one can access an overview of model information, all the model views – which constitute the structure of key submodels –, and a detailed description of each variable used in the model. Unit warnings are detailed using the '†' character.
+In this document, model users can access an overview of model information, all the model views – which constitute the structure of critical sub-models –, and a detailed description of each variable used in the model. Unit warnings are detailed using the ‘†’ character.
 
-The model has been extensively tested using data for the **Flat Panel Television (UNU 408)** in the **Netherlands (NL)**. The dataset assembled is available in the /datasets/ folder in the data_NL408.xlsx file.
+Data for the adoption of **Flat Panel Television (UNU 408)** in the **Netherlands (NL)** was used to test the model extensively. The dataset assembled is available in the /datasets/ folder in the data_NL408.xlsx file.
+
+Following, a set of guidelines for model users that intend to use the model to investigate the nationwide dynamics of EEE stocks and flows under CE strategies implementation:
 
 ## Data gathering
 
-First, one may choose a specific country and EEE.
+First, the model user may choose a specific country and EEE.
 
-He/she may obtain the values for the variables mentioned on the 'Data preparation' table for the specified range. 
-Sources are mentioned for the specific case of Flat Panel Television in the Netherlands. For other countries and EEE types, further research may be needed.
+He/she may obtain the values for the variables mentioned in the ‘Data preparation’ table for the specified range. 
+The example below contains sources for the specific case of Flat Panel Television in the Netherlands. For other countries and EEE types, further research is necessary.
 
 Class|Variable|Range|Source
 -----|--------|-----|------
@@ -60,36 +62,35 @@ Class|Variable|Range|Source
 
 ## Model calibration
 
-Now, in the retrospective model, one should import the dataset created. The file obtained from importing the data into the model is available in the datasets folder: input_NL408.vdfx. 
+Now, in the retrospective model, the model user should import the dataset created. 
+The file used for importing the data for Flat Panel Television in the Netherlands into the model is available in the /datasets/ folder: input_NL408.vdfx. 
 
-The 'potential adoption fraction' must be calibrated by using the variables (a) 'normalised ratio EEE price per PPP' and (b) 'R EEE per household'. The pairs of values to be inserted into 'potential adoption fraction' are constituted by [ai, bi]. This relation means that a certain adoption level is obtained considering the price of the good and the purchasing power of that population. When the price lowers and purchasing power is high enough, a certain percentage of the population will access that technology.
+The ‘potential adoption fraction’ must be calibrated by using the variables (a) ‘normalised ratio EEE price per PPP’ and (b) ‘R EEE per household’. The pairs of values to be inserted into ‘potential adoption fraction’ are constituted by [ai, bi]. This relation means the adoption level follows the price of the good and the purchasing power of that population. When the price lowers, and purchasing power is high enough, a certain percentage of the population will access that technology.
 
-You are trying to make 'adoption purchases' mimic the first peak of 'R EEE commissioning'. 
-Once the values for 'potential adoption fraction' are obtained, the output dataset from the retrospective model is used to run the prospective  model. The file obtained from the calibration of the retrospective model is available in the datasets folder: prerun_NL408.vdfx. 
+The model user should try to make ‘adoption purchases’ mimic the first peak of ‘R EEE commissioning’. 
+Once the calibration of the ‘potential adoption fraction’ is done, the output dataset from the retrospective model runs the prospective model. The file obtained from the calibration of the retrospective model is available in the datasets folder: prerun_NL408.vdfx. 
 
-After that, one may verify the fit among the curves of 'historic EEE put on market' (dataset input), 'R EEE in use' (retrospective model output), and 'historic disposal of EEE' (dataset input) to the calculated values of 'EEE commissioning', 'Total EEE in use' and 'disposal of EEE as WEEE'. The graphs are already available in the view '5. Calibration and tests'.
+After that, the model user should examine the fit among the curves of ‘historic EEE put on market’ (dataset input), ‘R EEE in use’ (retrospective model output), and ‘historic disposal of EEE’ (dataset input) to the calculated values of ‘EEE commissioning’, ‘Total EEE in use’ and ‘disposal of EEE as WEEE’. The calibration graphs are available in the view’ 5. Calibration and tests’.
 
-One may also the Theil's inequality statistics structure available in the same view to verify the sources of errros among simulated and imported time series: bias (Um), unequal variation (Us), and unequal covariation (Uc).
+The model user may also the Theil’s inequality statistics structure available in the same view to verify the sources of error among simulated and imported time series: bias (Um), unequal variation (Us), and unequal covariation (Uc).
 
-If the curves are adequately calibrated, one may start model use.
-
-Following the fit curves obtained considering a Baseline scenario, where the infrastructure levels of CE mechanisms for the Netherlands obtained from secondary research are applied.
+Following the fit curves obtained considering a Baseline scenario, applying the infrastructure levels of CE mechanisms for the Netherlands obtained from secondary research.
 
 ![Prospective model calibration](https://github.com/danguzzo/cirularEEE_SDmodel/blob/master/images/circularEEE_v.1prospcalibration.jpg)
 
 ## Model use
 
-At this point, one can try some combinations of CE mechanisms to verify the flow of resources.
+Once the curves are adequately calibrated, the model user can start using the model to examine Circular Economy strategies implementation.
 
 The following variables influence the implementation of Circular Economy mechanisms in the model:
 - lifetime ratio
-- second use infrastructure level
+- second-use infrastructure level
 - repairing infrastructure level
 - remanufacturing infrastructure level
 - recycling infrastructure level
 
 Towards a Circular Economy, organisations and governments aim to decrease the inflow of materials and products in the system while keeping them in high use. 
-Thus, we recommend you to check how the changes in CE mechanisms influence the stocks and flows of EEE and WEEE in the system.
+Thus, we recommend the model user to check which CE mechanisms lead to less need for material extraction, EEE commissioning and WEEE disposal in the system.
 
 ## Model testing activities
 
@@ -97,35 +98,35 @@ The table below outlines the testing activities performed in the model. Learning
 
 Test type|Test description|Learning outcomes and model changes
 ---------|---------------------|-----------------------------------
-Boundary adequacy	| Model boundary chart development | Model boundaries defined. Relevant structures have been endogenized. Reliable data for most of the exogenous structures can be obtained from structured databases.
-Boundary adequacy	| Model expansion to include the Adoption submodel | Stabilises the transition from retrospective to prospective simulation. Enables verification of resource usage in the face of adoption of a technology.
-Structure assessment | Subsystem diagram development | Represents the main concepts and feedback structures used to address the model purpose.
-Structure assessment | Model conceptualisation following dynamic Material Flow Analysis concept	| Such an approach relies on the conservation of matter principle. Non-recycled WEEE stock is the sink of the system.
-Structure assessment | Application of the mass-balance check (Dangerfield, 2014; Schwaninger & Groesser, 2016) for products and materials |	Permits verification that the model does not gain or lose mass of materials and products.
-Structure assessment | Development and testing relevant sub-model parts in isolation to build confidence before aggregate analysis | Every EEE and WEEE flow has been developed and tested isolated from changes in other parts until a plausible behaviour was obtained. 
-Structure assessment | Verification of stocks in varied conditions to identify negative values | Leadst to changing model structure or equations. For instance, the 'Available used-EEE' stock had to be constrained. The following assumption was implemented: these products will rather move into second use, then remanufacturing, then recycling. In that order of preference.
-Dimensional adequacy | Use of parameters with real-world meaning when modelling | Every parameter receives a name and description that clearly identifies its meaning. One clear ad hoc variable is 'effect of PPP on the average number of EEE per household', that helps to calculate EEE demand from recurrent purchases of adopters based on historical data.
-Parameter assessment | Elaboration of a step-by-step guide to calibrating relevant partial models | Enables to calibrate the behaviour of EEE adoption from retrospective data available from 1980-2015.
-Extreme conditions | Bounding the use of the model by levels of CE mechanisms implementation | The 0 to 4 infrastructure level indexes bound the model. It decreases the potential of unexpected behaviour due to extreme conditions. In the other hand, it may decrease the possibilities for insights.
-Extreme conditions | Bounding auxiliaries and flows with potential extreme behaviour | For instance, a combination of MIN and one-minus function was used to prevent the 'fraction of decommissioned EEE introduced to E-waste market' to be negative.
-Extreme conditions | Shocks and extreme condition testing	| For instance, tested the inflow of a shipment of used products as 'Available used-EEE' with a given average age in the middle of the adoption process, mimicking what happens in countries under development. Mass balance is maintained, EEE and WEEE flows provide insights.
+Boundary adequacy	| Model boundary chart development | Facilitates to identify relevant structures to model. Reliable data is available for most of the exogenous variables.
+Boundary adequacy	| Enables prospective simulation from historical data.
+Structure assessment | Subsystem diagram development | Represents the main concepts and feedback structures in the model.
+Structure assessment | Model conceptualisation following the dynamic material flow analysis (MFA) concept	| Conservation of matter is embedded in the model structure. Non-recycled WEEE stock is the sink of the system.
+Structure assessment | Application of the mass-balance check (Dangerfield, 2014; Schwaninger & Groesser, 2016) to products and materials |	Enables examining gains or losses of materials and products in the model. Total gains should be zero.
+Structure assessment | Development and testing relevant sub-model parts in isolation | Enables building confidence in plausible behaviour of sub-models before aggregate analysis. 
+Structure assessment | Experimentation with stocks in varied conditions to identify negative values | Identification of variables to constrain, e.g., limiting the flows into second use, remanufacturing and recycling (in that order of preference) to prevent negative values of Available use-EEE.
+Dimensional adequacy | Use of parameters with real-world meaning when modelling | Name and description clearly identify variables’ meaning. There are a few ad hoc variables as ‘effect of PPP on the average number of EEE per household’.
+Parameter assessment | Elaboration of a step-by-step guide to calibrating relevant partial models | Enables calibration of the behaviour of EEE adoption from retrospective data from 1980–2015 to obtain the behaviour from 1980–2050.
+Extreme conditions | Bounding the use of the model by levels of CE mechanisms implementation | The 0 to 4 infrastructure level indexes bound the model. 
+Extreme conditions | Bounding auxiliaries and flows with potential extreme behaviour | Combination of MIN and one-minus function to prevent negative values. E.g., “fraction of decommissioned EEE introduced to WEEE”.
+Extreme conditions | Shocks and extreme condition testing	| It is possible to examine the inflow of a shipment of used products as “Available used-EEE” with a given average age in a moment in time, mimicking what happens in countries under development. Mass balance is maintained.
 Integration error	| Testing the model using RG4 of 1 year to 0.125-year time steps | Results are not sensitive to these choices in the time step. Nevertheless, the supply chain delays are proportional to the time step.
-Behaviour Reproduction | Setting up a dashboard to fit the prospective model to external data and data calculated in the prospective model | Helps to calibrate the model through behaviour reproduction of the following variables: 'EEE commissioning' and 'historic annual EEE put on market'; ‘Total EEE in use' and 'R EEE in use'; ‘disposal of EEE as WEEE’ and ‘historic disposal of EEE’
-Behaviour Reproduction | Application of descriptive statistics tools to calibrate the model – Theil inequality statistics (Oliva, 1995; Sterman, 2000) |	A structure to verify bias, unequal variation, and unequal covariation of simulated and input variables can be used to verify the fit among variables above. Holds potential to automate steps of the calibration process.
-Family member test | Using Netherlands (NL) and Estonia (EST) data for Fridges (UNU 108) | NL and EST provide good sources for data. EST data is harder to obtain when closer to 1980 - former USSR state. The prospective model can be calibrated using the retrospective data available for both cases. Apart from the fact that NL and EST are from different stratum in vanStraalen2016 analysis, they are both mature markets for fridges. This way, comparing the representation of EEE dynamics under CE strategies for both regions does not bring many different insights.
-Family member test | Using (Netherlands) NL data for Fridges (UNU 108) and Flat Display Panel TVs (UNU408) | The prospective model can be calibrated using the retrospective data available for both cases (108NL and 408NL). It enables the discussion of the general implementation of CE mechanisms in EEE. As the adoption curve for Flat Display Panel TVs is similar to the adoption of a technology that becomes mainstream, it is more useful to visualise CE strategies implementation.
+Behaviour Reproduction | Setting up a dashboard to fit the prospective model to external data and data calculated in the prospective model | Helps to calibrate the model through behaviour reproduction of the following variables: ‘EEE commissioning’ and ‘historic annual EEE put on market’; ‘Total EEE in use’ and ‘R EEE in use’; ‘disposal of EEE as WEEE’ and ‘historic disposal of EEE’
+Behaviour Reproduction | Application of descriptive statistics tools to calibrate the model – Theil inequality statistics (Oliva, 1995; Sterman, 2000) |	A structure to verify bias, unequal variation, and unequal covariation of simulated and input variables enables verifying the fit among two variables.
+Family member test | Using Netherlands (NL) and Estonia (EST) data for Fridges (UNU 108) | Calibration is possible from retrospective data in both cases (NL108 and EST108). EST data closer to 1980 is harder to obtain. Although NL and EST are from different stratum in van Straalen et al. (2016), they are both mature markets for fridges. Comparing EEE dynamics in both cases does not provide much insight.
+Family member test | Using (Netherlands) NL data for Fridges (UNU 108) and Flat Display Panel TVs (UNU408) | Calibration is possible from retrospective data in both cases (108NL and 408NL). The adoption curve for Flat Display Panel TVs enables more general discussion of CE strategies implementation as it shows the full adoption of a technology.
 
 ## Model limitations
 
-The table below contains the model limitations and learning outcomes from potential tests. These tests are out of scope for this modelling effort, but they indicate future endeavours to enhance cofidence to the model, or reframe the model purpose. Model limitations present an opportunity for other researchers and decision-makers to enhance the Circular EEE SD Model.
+The table below contains the model limitations and learning outcomes from potential tests. These tests are out of scope for this modelling effort, but they indicate future endeavours to enhance confidence to the model, or reframe the model purpose. Model limitations present an opportunity for other model users, researchers and decision-makers to enhance the Circular EEE SD Model.
 
 Limitation|Potential learning outcomes
 ----------|---------------------------
 Limited explanatory ability of the adoption mechanism |	Further understanding the types of adoption patterns and their influence in the effects of CE strategies implementation. 
-Limited explanatory ability of the types of purchasing | Further understand how first purchases, recurrent purchases to replace, and additional purchases influence and are influenced by CE strategies implementation. 
+Limited explanatory ability of the types of purchasing | Further understanding of how first purchases, recurrent purchases to replace, and additional purchases influence and are influenced by CE strategies implementation. 
 Limited explanatory ability of the types of obsolescence | Increase understanding of the influence of psychological and functional dimensions of obsolesce.
-Limited implementation of non-transaction based CE strategies | Increase understanding of the impacts of sharing and servitization strategies
-Limited explanatory ability of CE mechanisms leverages |	Increase understanding of the incentives for CE mechanisms implementation. 
+Limited implementation of non-transaction based CE strategies | Increase understanding of the impacts of sharing and servitisation strategies
+Limited explanatory ability of CE mechanisms leverages |	Increase understanding of the structures and incentives for CE mechanisms implementation. 
 
 ## References
 
