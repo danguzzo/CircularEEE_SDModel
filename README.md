@@ -99,7 +99,7 @@ The table below outlines the testing activities performed in the model. Learning
 Test type|Test description|Learning outcomes and model changes
 ---------|---------------------|-----------------------------------
 Boundary adequacy	| Model boundary chart development | Facilitates to identify relevant structures to model. Reliable data is available for most of the exogenous variables.
-Boundary adequacy	| Enables prospective simulation from historical data.
+Boundary adequacy	| Model expansion to include the Adoption sub-model | Enables prospective simulation from historical data.
 Structure assessment | Subsystem diagram development | Represents the main concepts and feedback structures in the model.
 Structure assessment | Model conceptualisation following the dynamic material flow analysis (MFA) concept	| Conservation of matter is embedded in the model structure. Non-recycled WEEE stock is the sink of the system.
 Structure assessment | Application of the mass-balance check (Dangerfield, 2014; Schwaninger & Groesser, 2016) to products and materials |	Enables examining gains or losses of materials and products in the model. Total gains should be zero.
