@@ -128,6 +128,13 @@ Limited explanatory ability of the types of obsolescence | Increase understandin
 Limited implementation of non-transaction based CE strategies | Increase understanding of the impacts of sharing and servitisation strategies
 Limited explanatory ability of CE mechanisms leverages |	Increase understanding of the structures and incentives for CE mechanisms implementation. 
 
+## Referencing to this model
+When referring to 'The Circular EEE SD Model', please use:
+Guzzo, D., Rodrigues, V. P., & Mascarenhas, J. (2020). The Circular EEE SD Model. Retrieved from: https://github.com/danguzzo/circularEEE_Sdmodel.
+
+Also, please check results and insghts from model use in the publication:
+Guzzo, D., Rodrigues, V. P., & Mascarenhas, J. (2021). A systems representation of the Circular Economy: Transition scenarios in the Electrical and Electronic Equipment (EEE) industry. Technological Forecasting and Social Change. https://doi.org/10.1016/j.techfore.2020.120414
+
 ## References
 
 de Almeida, A., & Rosenfeld, A. H. (1987). Demand-Side Management and Electricity End-Use Efficiency (Vol. 149; A. T. Almeida & A. H. Rosenfeld, Eds.). https://doi.org/10.1620/tjem.162.269
