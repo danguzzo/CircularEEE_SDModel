@@ -130,9 +130,11 @@ Limited explanatory ability of CE mechanisms leverages |	Increase understanding 
 
 ## Referencing to this model
 When referring to 'The Circular EEE SD Model', please use:
+
 Guzzo, D., Rodrigues, V. P., & Mascarenhas, J. (2020). The Circular EEE SD Model. Retrieved from: https://github.com/danguzzo/circularEEE_Sdmodel.
 
 Also, please check results and insghts from model use in the publication:
+
 Guzzo, D., Rodrigues, V. P., & Mascarenhas, J. (2021). A systems representation of the Circular Economy: Transition scenarios in the Electrical and Electronic Equipment (EEE) industry. Technological Forecasting and Social Change. https://doi.org/10.1016/j.techfore.2020.120414
 
 ## References
